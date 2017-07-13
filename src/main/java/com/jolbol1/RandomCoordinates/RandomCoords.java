@@ -23,10 +23,12 @@ import com.jolbol1.RandomCoordinates.commands.*;
 import com.jolbol1.RandomCoordinates.commands.handler.CommandHandler;
 import com.jolbol1.RandomCoordinates.listeners.*;
 import com.jolbol1.RandomCoordinates.managers.ConstructTabCompleter;
-import com.jolbol1.RandomCoordinates.managers.Metrics;
+//import com.jolbol1.RandomCoordinates.managers.Metrics;
 import com.jolbol1.RandomCoordinates.managers.Util.PortalLoaded;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
+
+import org.bstats.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

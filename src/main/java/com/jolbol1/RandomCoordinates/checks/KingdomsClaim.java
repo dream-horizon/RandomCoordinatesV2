@@ -31,6 +31,7 @@ import org.kingdoms.manager.game.GameManagement;
 /**
  * Created by JamesShopland on 14/04/15.
  */
+
 public class KingdomsClaim {
     /**
      * Checks if the player is near a Towny town, or within the checking radius.

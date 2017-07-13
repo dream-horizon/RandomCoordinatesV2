@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 
-
 /**
  * Created by JamesShopland on 02/11/14.
  */

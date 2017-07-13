@@ -37,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ForkJoinPool;
 import java.util.logging.Level;
@@ -58,24 +59,23 @@ class KitManager {
             final IEssentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
             ForkJoinPool.commonPool().execute(() -> {
                 if (ess != null) {
-                    //  Map<String, Object> kit = ess.getSettings().getKit(name.toLowerCase());
+                    Map<String, Object> kit = ess.getSettings().getKit(name.toLowerCase());
                     final User u = ess.getUser(p);
                     List<String> items;
+                    
                     try {
-                        final Kit kitMe = new Kit(name, ess);
-                        items = kitMe.getItems();
-
+                        items=Kit.getItems(ess, u, name, kit);
                         final Inventory inv = c.getInventory();
 
 
                         inv.addItem(deSerialize(items, u).get());
                     } catch (Exception e) {
                         e.printStackTrace();
-                        RandomCoords.logger.severe("Essnetials unable to deserialize kit (RandomCoords)");
+                        RandomCoords.logger.severe("Essentials unable to deserialize kit (RandomCoords)");
 
                     }
                 } else {
-                    RandomCoords.logger.severe("Essnetials was null when getting kit. (RandomCoords)");
+                    RandomCoords.logger.severe("Essentials was null when getting kit. (RandomCoords)");
                 }
             });
         }
@@ -120,12 +120,11 @@ class KitManager {
         } else {
             final IEssentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
                 if (ess != null) {
-                    //  Map<String, Object> kit = ess.getSettings().getKit(name.toLowerCase());
+                    Map<String, Object> kit = ess.getSettings().getKit(name.toLowerCase());
                     final User u = ess.getUser(p);
                     List<String> items;
                     try {
-                        final Kit kitMe = new Kit(name, ess);
-                        items = kitMe.getItems();
+                    	items=Kit.getItems(ess, u, name, kit);
 
                         for(ItemStack item : deSerialize(items, u).get()) {
                             itemStacks.add(item);
