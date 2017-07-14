@@ -455,7 +455,7 @@ public class RandomCoords extends JavaPlugin {
          */
         try {
             //Website URL.
-            final String web = "https://rawgit.com/jolbol1/RandomCoordinatesV2/master/src/update.yml";
+            final String web = "https://raw.githubusercontent.com/PHENOMICAL/RandomCoordinatesV2/master/src/main/resources/update.yml";
             //Sets it as the site to be read from.
             site = new URL(web);
 
