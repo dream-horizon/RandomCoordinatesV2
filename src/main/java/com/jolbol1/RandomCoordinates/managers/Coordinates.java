@@ -87,11 +87,10 @@ public class Coordinates {
     private final End end = new End();
     //Grabs the max attempts value from the config.
     private final int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
-
-    //TODO: Implement RedProtect
-    //private final RedProtect redProtect = new RedProtect();
-    //TODO: Implement Kingdoms
-    //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
+    //Load up RedProtect
+    private final RedProtect redProtect = new RedProtect();
+    //Load up KingdomsClaim
+    private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
     //Grab an instance of the debug manager.
     private final DebugManager debugManager = new DebugManager();
 
@@ -421,9 +420,7 @@ public class Coordinates {
         if(RandomCoords.getPlugin().config.getString("debug").equalsIgnoreCase("true")) {
             debugManager.logToFile("Faction: " + String.valueOf(fc.FactionCheck(location)) + "\nGrief: " + String.valueOf(gpc.griefPrevent(location)) + "\nPlayer: " + String.valueOf(prc.isPlayerNear(location)) + "\nTowny: " + String.valueOf(tc.TownyCheck(location)) + "\nWorldBorder: " + String.valueOf(wbc.WorldBorderCheck(location)) + "\nWorldGuard: " + String.valueOf(worldGuardEnabled(location)) + "\nVanillaBorder" + String.valueOf(!isOutsideBorder(location)));
         }
-        //TODO: Implements Kingdoms, Redprotect
-        //return kingdomsClaim.KingdomsClaim(location) && redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
-        return fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location); 
+        return kingdomsClaim.KingdomsClaim(location) && redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
     }
 
 

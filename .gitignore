@@ -1,8 +1,12 @@
 # maven
 /target/
 
+dependency-reduced-pom.xml
 
 # eclipse project file
 .settings/
 .classpath
 .project
+
+# libraries
+/src/lib/

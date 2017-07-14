@@ -72,17 +72,15 @@ public class CoordinatesManager {
     //Grabs the max attempts value from the config.
     //private final int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
     //Load up RedProtect
-    //TODO: Implement RedProtect
-    //private final RedProtect redProtect = new RedProtect();
+    private final RedProtect redProtect = new RedProtect();
     //Load up KingdomsClaim
-    //TODO: Implement Kingdoms
-    //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
+    private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
     //Grab an instance of the debug manager.
     //private final DebugManager debugManager = new DebugManager();
 
     private final BonusChestManager bonusChestManager = new BonusChestManager();
-    //TODO: Implement Residences
-    //private final ResidenceCheck residenceCheck = new ResidenceCheck();
+    //Load up ResidenceCheck
+    private final ResidenceCheck residenceCheck = new ResidenceCheck();
 
     public int key = 574272099;
 
@@ -228,13 +226,10 @@ public class CoordinatesManager {
 
         }
         //If its not one of the blacklisted blocks, Continue and check for the regions.
-        //TODO: Implement RedProtect, Kingdoms, residences
-        /*return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
+        return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
                 !fc.factionLandNearby(location) && !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
                 !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location) &&
-                !residenceCheck.isChunkProtected(location);*/
-        return !fc.factionLandNearby(location) && !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
-              !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);    
+                !residenceCheck.isChunkProtected(location);
     }
 
 

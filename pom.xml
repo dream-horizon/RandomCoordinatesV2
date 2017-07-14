@@ -104,8 +104,36 @@
 			<artifactId>bstats-bukkit</artifactId>
 			<version>1.1</version>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>br.netk.fabiozumbi12</groupId>
+			<artifactId>RedProtect</artifactId>
+			<scope>system</scope>
+			<version>7.2.0-b414</version>
+			<systemPath>${basedir}\src\lib\RedProtect-Spigot-7.2.0-b414.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org.bekvon.bukkit</groupId>
+			<artifactId>residence</artifactId>
+			<scope>system</scope>
+			<version>4.7.0.5</version>
+			<systemPath>${basedir}\src\lib\Residence4.7.0.5.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org</groupId>
+			<artifactId>kingdoms</artifactId>
+			<scope>system</scope>
+			<version>13.0.9</version>
+			<systemPath>${basedir}\src\lib\Kingdoms.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>org</groupId>
+			<artifactId>generallib</artifactId>
+			<scope>system</scope>
+			<version>0.1.4</version>
+			<systemPath>${basedir}\src\lib\GLib.jar</systemPath>		
+		</dependency>
 
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -136,6 +164,7 @@
 				</executions>
 			</plugin>
 
+			<!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -148,7 +177,7 @@
 					</excludes>
 				</configuration>
 			</plugin>
-
+			-->
 		</plugins>
 
 	</build>

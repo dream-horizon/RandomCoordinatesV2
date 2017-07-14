@@ -27,7 +27,6 @@ import org.kingdoms.constants.land.SimpleChunkLocation;
 import org.kingdoms.manager.game.GameManagement;
 
 
-
 /**
  * Created by JamesShopland on 14/04/15.
  */
