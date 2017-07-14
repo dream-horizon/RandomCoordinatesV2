@@ -1,9 +1,9 @@
 name: RandomCoords
 main: com.jolbol1.RandomCoordinates.RandomCoords
-version: 0.6.2-RELEASE
+version: 2.1.0-RELEASE
 website: http://bukkit.org
 author: Jolbol1
-softdepend: [Factions, MassiveCore, WorldEdit, WorldBorder, Vault, WorldGuard, Essentials]
+softdepend: [Factions, MassiveCore, WorldEdit, WorldBorder, Vault, WorldGuard, Essentials, Towny, Residence, RedProtect, Kingdoms, GriefPrevention]
 description: >
              Get away quick with a random coordinate.
 commands:
