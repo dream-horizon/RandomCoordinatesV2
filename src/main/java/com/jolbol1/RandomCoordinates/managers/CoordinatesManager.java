@@ -33,13 +33,17 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
@@ -290,7 +294,6 @@ public class CoordinatesManager {
         int attempts = 0;
         int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
 
-
         while(!isItSafe) {
             if(attempts == maxAttempts) {
                 return null;
@@ -307,19 +310,60 @@ public class CoordinatesManager {
     }
 
 
-    public boolean randomlyTeleportPlayer(Player player, World world, int max, int min, CoordType coordType, double cost) {
+    //TODO: Maybe add an Checks per tick function
+    public void teleportToSafeRandomLocation(World world, int max, int min, Player player, CoordType coordType, int timeBefore, int cooldownTime, double cost) {
+    	new BukkitRunnable() {
+    		int attempts = 0;
+    		int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
+    		boolean isItSafe = false;
+    		Location randomLocation = null; 
+    		
+			@Override
+			public void run() {
+				if(attempts == 50) {
+					messages.takesLonger(player);
+				}
+				
+				if(isItSafe) {
+					//Found safe Coordinates
+		            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
+		                double y = getSafeY(randomLocation);
+		                randomLocation.setY(y);
+		            }					
+		            
+		            //TODO: Is double implemented
+		            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
+		            	randomLocation = end.endCoord(randomLocation);
+		            }
+		            
+		            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
+					this.cancel();
+				}
+				
+	            if(attempts == maxAttempts) {
+	            	//Max Attempts reached
+	                messages.couldntFind(player); 
+	            	this.cancel();
+	            }
 
+	            //Get a random releative location with provided bounds.
+	            randomLocation = getRelativeRandomLocation(world, min, max);
+	            isItSafe = isTheLocationSafe(randomLocation);
+	            attempts++;
+			}
+    	}.runTaskTimer(RandomCoords.getPlugin(), 0L, 0L);
+    }    
+    
+    public void randomlyTeleportPlayer(Player player, World world, int max, int min, CoordType coordType, double cost) {
 
         if(inTimeBefore(player)) {
             messages.TeleportingIn(player, Cooldown.getTimeLeft(player.getUniqueId(), "TimeBefore"));
-            return false;
+            return;
         }
-
-
 
         if(inCooldown(player, coordType.getName())) {
             messages.cooldownMessage(player, Cooldown.getTimeLeft(player.getUniqueId(), coordType.getName()));
-            return false;
+            return;
         }
 
         boolean doesLimiterApply = false;
@@ -327,8 +371,7 @@ public class CoordinatesManager {
         //Have they reached the limit, If limiter applys.
         if(doesLimiterApply && hasPlayerReachedLimit(player)) {
             messages.reachedLimit(player);
-            return false; }
-
+            return; }
 
         switch (coordType) {
             case COMMAND:
@@ -341,7 +384,7 @@ public class CoordinatesManager {
 
         if(!hasCorrectAmountOfMoney(player, cost)) {
             messages.cost(player, cost);
-            return false;
+            return;
         }
 
         //Get the time before
@@ -358,41 +401,20 @@ public class CoordinatesManager {
         }
 
         //Get a new safe location with provided bounds.
+        
         Location safeLocation;
         if(shouldWarp(coordType)) {
             safeLocation = getRandomWarp(player, world, coordType);
-        } else {
-            safeLocation = getSafeRandomLocation(world, max, min);
-            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
-                double y = getSafeY(safeLocation);
-                safeLocation.setY(y);
+            
+            if(safeLocation.getWorld().getBiome(safeLocation.getBlockX(), safeLocation.getBlockZ()) == Biome.SKY ) {
+                safeLocation = end.endCoord(safeLocation);
             }
+
+            scheduleTeleport(player, safeLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);            
+            
+        } else {
+        	teleportToSafeRandomLocation(world, max, min, player, coordType, timeBefore, cooldownTime, cost);
         }
-
-        //Is the location not actually safe?
-        if(safeLocation == null) {
-            messages.couldntFind(player);
-            return false;
-        }
-
-
-
-        if(safeLocation.getWorld().getBiome(safeLocation.getBlockX(), safeLocation.getBlockZ()) == Biome.SKY ) {
-            safeLocation = end.endCoord(safeLocation);
-        }
-
-
-
-
-        scheduleTeleport(player, safeLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
-
-            /**
-             * The loop that handles the loading of the chunk that they are teleporting into.
-             * If the config options false, Exit the loop. If the chunks generated, exit the loop.
-             */
-
-        return true;
-
     }
 
     /**
@@ -420,6 +442,7 @@ public class CoordinatesManager {
 
         scheduler.scheduleSyncDelayedTask(RandomCoords.getPlugin().getInstance(), () -> {
             RandomTeleportEvent event = new RandomTeleportEvent(player, randomLocation, coordType, cooldownTime);
+            
             Bukkit.getServer().getPluginManager().callEvent(event);
 
 
@@ -436,7 +459,7 @@ public class CoordinatesManager {
                 event.setCancelled(true);
                 return;
             }
-
+            
             if (!event.isCancelled()) {
                 if(!chargePlayer(player, cost)) { return;}
                 cooldown.start();
@@ -734,7 +757,7 @@ public class CoordinatesManager {
      * @return Safe y value, plus a buffer. (2.5 = max before fall damage)
      */
     private double getSafeY(Location location) {
-
+    	
         if(location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()) == Biome.HELL) {
             return (nether.getSafeYNether(location));
         }

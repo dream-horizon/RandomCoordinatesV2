@@ -133,6 +133,11 @@ public class MessageManager {
         sender.sendMessage(prefix() + message);
     }
 
+    public void takesLonger(final CommandSender sender) {
+        final String message = ChatColor.translateAlternateColorCodes('&', RandomCoords.getPlugin().language.getString("TakesLonger"));
+        sender.sendMessage(prefix() + message);
+    }    
+    
     /**
      * Message thats sent when the player has reached the limit.
      * @param sender Who we're sending the message to.
@@ -543,5 +548,6 @@ public class MessageManager {
 
     }
 
+    
 
 }
