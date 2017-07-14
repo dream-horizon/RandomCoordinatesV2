@@ -36,6 +36,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import java.io.BufferedReader;
@@ -287,10 +288,6 @@ public class Coordinates {
             return;
         }
 
-        //Sets exitLoop to false to keep the while loop running until told otherwise.
-        boolean exitLoop = false;
-        //Sets attempts to 0. Will be added to every unsuccessful attempt to get safe coordinates.
-        int attempts = 0;
         /**
          *If the maxmimum is the secret key, AKA not provided, Then set it to the configured max.
          */
@@ -304,64 +301,75 @@ public class Coordinates {
             min = getMin(world);
         }
 
-        Location center;
-        Location locationTP;
-
-        /**
-         * This creates the loop to check for a safe location to teleport users to.
-         */
-        while (!exitLoop) {
-
-            /**
-             * If the number of attempts has reached the maximum, Then kill the loop.
-             */
-            if (attempts >= maxAttempts) {
-                messages.couldntFind(player);
-                RandomCoords.getPlugin().failedTeleports++;
-                return;
-            }
-            //Get the coordinate that is going to be tested.
-            locationTP = getRandomCoordinates(player, max, min, world);
-            //Get the boundary center of the world.
-            center = new Location(world, getCenterX(world), locationTP.getY(), getCenterZ(world));
-
-            /**
-             * If the location is not safe, or isnt in the circular radius, then add to the attempts.
-             * Otherwise, Start the proccess of teleporting, Such as cooldowns, time befores and limiter checks.
-             */
-            if (!isLocSafe(locationTP) || circleRadius(locationTP, max, center)) {
-                //Adds to attempts.
-                attempts++;
-                debugManager.logToFile("\n" + attempts + "LocSafe: " + String.valueOf(isLocSafe(locationTP)) + " Circle: " + String.valueOf(circleRadius(locationTP, max, center)) + "\n");
-                //Keeps the loop going.
-                exitLoop = false;
-
-            } else {
-                //Stops the loop.
-                exitLoop = true;
-                //Sets the location. Mainly used to set it to a warp if that is the coord type.
-                locationTP = shouldWarp(player, world, locationTP, name, type);
-                //Adds the buffer to the teleport location
-                if(!(type == CoordType.WARPWORLD || type == CoordType.WARPS)) {
-                    locationTP = addBuffer(locationTP);
-                }
-                /**
-                 * Standard check to see if something has gone wrong. If the location is null, then cancel. Seldom use.
-                 */
-                if (locationTP == null) {
-                    return;
-                }
-                /**
-                 * Then schedule the final teleport.
-                 */
-                limiterApplys(player, name);
-                scheduleStuff(player, locationTP, thisCost, player.getHealth(), player.getLocation(), timeBefore, cooldown, type);
-
-            }
-        }
+        exitLoop(player, max, min, world, type, name, thisCost, timeBefore, cooldown);
     }
 
-
+    
+    /**
+     * This creates the loop to check for a safe location to teleport users to.
+     */
+    public void exitLoop(Player player, int max, int min, World world, CoordType type, String name, double thisCost, int timeBefore, int cooldown) {
+        new BukkitRunnable() {
+        	int attempts = 0;
+            Location center;
+            Location locationTP;        	
+			
+            @Override
+			public void run() {
+	            /**
+	             * If the number of attempts has reached the maximum, Then kill the loop.
+	             */	
+	            if (attempts >= maxAttempts) {
+	                messages.couldntFind(player);
+	                RandomCoords.getPlugin().failedTeleports++;
+	                this.cancel();
+	            }
+	            
+				if(attempts == 50) {
+					messages.takesLonger(player);
+				}	            
+	            
+	            locationTP = getRandomCoordinates(player, max, min, world);
+	            //Get the coordinate that is going to be tested.
+	            locationTP = getRandomCoordinates(player, max, min, world);
+	            //Get the boundary center of the world.
+	            center = new Location(world, getCenterX(world), locationTP.getY(), getCenterZ(world));
+	            
+	            /**
+	             * If the location is not safe, or isnt in the circular radius, then add to the attempts.
+	             * Otherwise, Start the proccess of teleporting, Such as cooldowns, time befores and limiter checks.
+	             */
+	            if (!isLocSafe(locationTP) || circleRadius(locationTP, max, center)) {
+	                //Adds to attempts.
+	                attempts++;
+	                debugManager.logToFile("\n" + attempts + "LocSafe: " + String.valueOf(isLocSafe(locationTP)) + " Circle: " + String.valueOf(circleRadius(locationTP, max, center)) + "\n");
+	                //Keeps the loop going.
+	            }
+	            else{
+	                //Sets the location. Mainly used to set it to a warp if that is the coord type.
+	                locationTP = shouldWarp(player, world, locationTP, name, type);
+	                //Adds the buffer to the teleport location
+	                if(!(type == CoordType.WARPWORLD || type == CoordType.WARPS)) {
+	                    locationTP = addBuffer(locationTP);
+	                }
+	                /**
+	                 * Standard check to see if something has gone wrong. If the location is null, then cancel. Seldom use.
+	                 */
+	                if (locationTP == null) {
+	                    return;
+	                }
+	                /**
+	                 * Then schedule the final teleport.
+	                 */
+	                limiterApplys(player, name);
+	                scheduleStuff(player, locationTP, thisCost, player.getHealth(), player.getLocation(), timeBefore, cooldown, type);
+	                //Stops the loop.
+	                this.cancel();
+	            }
+			}
+        }.runTaskTimer(RandomCoords.getPlugin(), 0L, 0L);    	
+    }
+    
 
     /**
      * Checks if the location is safe.

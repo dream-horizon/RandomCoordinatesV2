@@ -35,15 +35,12 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
@@ -346,7 +343,7 @@ public class CoordinatesManager {
 	            	this.cancel();
 	            }
 
-	            //Get a random releative location with provided bounds.
+	            //Get a random relative location with provided bounds.
 	            randomLocation = getRelativeRandomLocation(world, min, max);
 	            isItSafe = isTheLocationSafe(randomLocation);
 	            attempts++;
