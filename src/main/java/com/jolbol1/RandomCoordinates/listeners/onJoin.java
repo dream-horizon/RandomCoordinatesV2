@@ -20,7 +20,7 @@
 package com.jolbol1.RandomCoordinates.listeners;
 
 import com.jolbol1.RandomCoordinates.RandomCoords;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.CoordinatesManager;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
@@ -35,7 +35,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
  */
 public class onJoin implements Listener {
 
-    private final Coordinates coordinates = new Coordinates();
+    //private final Coordinates coordinates = new Coordinates();
     private final MessageManager messages = new MessageManager();
     private final CoordinatesManager coordinatesManager = new CoordinatesManager();
 

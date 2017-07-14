@@ -49,12 +49,12 @@ public class WorldGuardCheck {
             //Checks if WorldGuard is enabled
             if (RandomCoords.getPlugin().config.getString("WorldGuard").equals("true")) {
 
-                final int X = l.getBlockX();
+                //final int X = l.getBlockX();
                 //  int Y = l.getBlockY();
-                final int Z = l.getBlockZ();
+                //final int Z = l.getBlockZ();
 
                 //Calls the BufferZone
-                final int r = RandomCoords.getPlugin().config.getInt("CheckingRadius");
+                //final int r = RandomCoords.getPlugin().config.getInt("CheckingRadius");
 
 
                 //Checks all coordinates within the buffer zone for a region

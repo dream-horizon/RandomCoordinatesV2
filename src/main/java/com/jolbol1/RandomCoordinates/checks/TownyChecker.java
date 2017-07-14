@@ -49,7 +49,7 @@ public class TownyChecker {
                 int z = Z - r;
 
                 final int bx = x;
-                final int bz = z;
+                //final int bz = z;
 
 
              //   for (int i = 0; i < r * 2 + 1; i++) {

@@ -70,7 +70,7 @@ public class CoordinatesManager {
     //Creates an instance of the End Island finder.
     private final End end = new End();
     //Grabs the max attempts value from the config.
-    private final int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
+    //private final int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
     //Load up RedProtect
     //TODO: Implement RedProtect
     //private final RedProtect redProtect = new RedProtect();
@@ -78,7 +78,7 @@ public class CoordinatesManager {
     //TODO: Implement Kingdoms
     //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
     //Grab an instance of the debug manager.
-    private final DebugManager debugManager = new DebugManager();
+    //private final DebugManager debugManager = new DebugManager();
 
     private final BonusChestManager bonusChestManager = new BonusChestManager();
     //TODO: Implement Residences
@@ -180,7 +180,7 @@ public class CoordinatesManager {
      * @param location The location to check
      * @return False if unsafe, True if safe.
      */
-    private boolean isTheLocationSafe(final Location location) {
+    public boolean isTheLocationSafe(final Location location) {
 
         if(location == null) {
             return false;
@@ -326,7 +326,7 @@ public class CoordinatesManager {
 		            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
 		                double y = getSafeY(randomLocation);
 		                randomLocation.setY(y);
-		            }					
+		            }
 		            
 		            //TODO: Is double implemented
 		            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
@@ -377,6 +377,23 @@ public class CoordinatesManager {
             case PORTAL:
                 cost = RandomCoords.getPlugin().config.getDouble("PortalCost");
                 break;
+			case ALL:
+				break;
+			case JOIN:
+				break;
+			case JOINWORLD:
+				break;
+			case PLAYER:
+				break;
+			case SIGN:
+				break;
+			case WARPS:
+				break;
+			case WARPWORLD:
+				break;
+			default:
+				cost = config.getDouble("CommandCost");
+				break;
         }
 
         if(!hasCorrectAmountOfMoney(player, cost)) {
@@ -555,7 +572,7 @@ public class CoordinatesManager {
         if (!RandomCoords.getPlugin().setupEconomy() || cost == 0) {
             return true;
         } else {
-            final EconomyResponse r = RandomCoords.getPlugin().econ.withdrawPlayer(p, cost);
+            final EconomyResponse r = RandomCoords.econ.withdrawPlayer(p, cost);
             if (r.transactionSuccess()) {
                 messages.charged(p, cost);
                 return true;
@@ -596,6 +613,7 @@ public class CoordinatesManager {
      * @param world The world to check
      * @return True if banned, False if not.
      */
+    /*
     private boolean isWorldBanned(final World world) {
 
         if (RandomCoords.getPlugin().config.getStringList("BannedWorlds").contains(world.getName())) {
@@ -605,7 +623,8 @@ public class CoordinatesManager {
         //Return false, the world is not banned.
         return false;
     }
-
+	*/
+	
     /**
      * Checks if the player should warp, not teleport randomly.
      * @param coordType The coordType used.
@@ -960,7 +979,7 @@ public class CoordinatesManager {
      * @return True or False, do they have the money?
      */
     public boolean hasCorrectAmountOfMoney(final Player p, final double cost) {
-        return !RandomCoords.getPlugin().setupEconomy() || cost == 0 || cost <= RandomCoords.getPlugin().econ.getBalance(p);
+        return !RandomCoords.getPlugin().setupEconomy() || cost == 0 || cost <= RandomCoords.econ.getBalance(p);
     }
 
     public void addOneToLimiter(Player player, CoordType coordType) {

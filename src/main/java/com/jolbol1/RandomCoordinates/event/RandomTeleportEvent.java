@@ -24,7 +24,7 @@ package com.jolbol1.RandomCoordinates.event;
  */
 
 import com.jolbol1.RandomCoordinates.RandomCoords;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -39,7 +39,7 @@ public final class RandomTeleportEvent extends Event implements Cancellable {
     private CoordType coordType;
     private int cooldown;
     private boolean cancelled;
-    private Coordinates coordinates = new Coordinates();
+    //private Coordinates coordinates = new Coordinates();
 
     public RandomTeleportEvent(Player player, Location location, CoordType coordType, int cooldown) {
         this.player = player;

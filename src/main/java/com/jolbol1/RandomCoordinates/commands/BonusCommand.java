@@ -74,7 +74,7 @@ public class BonusCommand implements CommandInterface {
 
                 } else if(args[2].equalsIgnoreCase("-i")) {
                     String fileName = args[1].toString();
-                    bonusChestManager.itemStackToFile(fileName, player.getItemInHand());
+                    bonusChestManager.itemStackToFile(fileName, player.getInventory().getItemInMainHand());
                     messageManager.itemSaved(sender, fileName);
 
 

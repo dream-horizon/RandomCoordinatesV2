@@ -44,7 +44,7 @@ public class Portals implements CommandInterface {
 
     private final MessageManager messages = new MessageManager();
     private int key = 574272099;
-    private final Map selection = RandomCoords.getPlugin().wandSelection;
+    private final Map<Player, Location> selection = RandomCoords.getPlugin().wandSelection;
     private CommonMethods commonMethods = new CommonMethods();
 
 
@@ -57,7 +57,7 @@ public class Portals implements CommandInterface {
                 messages.notPlayer(sender);
                 return;
             }
-            String mode = null;
+            //String mode = null;
             //Set max to default if not used otherwise.
             int max = key;
             //Set min to deafault if not changed otherwise.
@@ -71,7 +71,7 @@ public class Portals implements CommandInterface {
 
             //Go through all the args provided.
 
-            Map modeUsed = commonMethods.processCommonArguments(args, false, true);
+            Map<ArgMode, Object> modeUsed = commonMethods.processCommonArguments(args, false, true);
 
             if(modeUsed.containsKey(ArgMode.WORLDNOTEXIST)) {
                 messages.invalidWorld(sender,(String) modeUsed.get(ArgMode.WORLDNOTEXIST));

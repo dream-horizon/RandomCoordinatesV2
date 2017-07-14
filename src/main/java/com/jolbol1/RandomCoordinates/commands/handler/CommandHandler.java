@@ -21,7 +21,7 @@ package com.jolbol1.RandomCoordinates.commands.handler;
 
 
 import com.jolbol1.RandomCoordinates.commands.CommonMethods;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.CoordinatesManager;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import com.jolbol1.RandomCoordinates.managers.Util.ArgMode;
@@ -42,7 +42,7 @@ public class CommandHandler implements CommandExecutor {
     private static final Map<String, CommandInterface> commands = new ConcurrentHashMap<>();
     private final MessageManager messages = new MessageManager();
     private CommonMethods commonMethods = new CommonMethods();
-    private Coordinates coordinates = new Coordinates();
+    //private Coordinates coordinates = new Coordinates();
     private CoordinatesManager coordinatesManager = new CoordinatesManager();
 
     //Register method. When we register commands in our onEnable() we will use this.
@@ -85,7 +85,7 @@ public class CommandHandler implements CommandExecutor {
 
             if(Bukkit.getPlayer(args[0]) != null) {
                 Player p = Bukkit.getPlayer(args[0]);
-                Map modeUsed = commonMethods.processCommonArguments(args, true);
+                Map<ArgMode, Object> modeUsed = commonMethods.processCommonArguments(args, true);
                 int max = commonMethods.key;
                 int min = commonMethods.key;
                 String toWorldName = null;

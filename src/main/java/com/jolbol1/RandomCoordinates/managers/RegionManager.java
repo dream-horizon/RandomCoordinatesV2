@@ -20,11 +20,11 @@
 package com.jolbol1.RandomCoordinates.managers;
 
 import com.jolbol1.RandomCoordinates.RandomCoords;
-import com.sk89q.minecraft.util.commands.CommandException;
+//import com.sk89q.minecraft.util.commands.CommandException;
 import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.bukkit.WorldEditPlugin;
+//import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldedit.bukkit.selections.CuboidSelection;
 import com.sk89q.worldedit.bukkit.selections.Polygonal2DSelection;
 import com.sk89q.worldedit.bukkit.selections.Selection;
@@ -90,6 +90,7 @@ public class RegionManager {
 
     public Selection getSelectionFromRegion(Player player, String regionName, World world) {
 
+    	/*
         WorldEditPlugin worldEdit = null;
         try {
             worldEdit = RandomCoords.getPlugin().getWorldGuard().getWorldEdit();
@@ -97,7 +98,8 @@ public class RegionManager {
             e.printStackTrace();
             return null;
         }
-
+		*/
+    	
         com.sk89q.worldguard.protection.managers.RegionManager regionManager = RandomCoords.getPlugin().getWorldGuard().getRegionManager(world);
 
         ProtectedRegion region = regionManager.getRegion(regionName);

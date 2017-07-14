@@ -21,7 +21,7 @@ public class FactionChecker {
      * @return True or False, is it in faction land?
      */
     public boolean FactionCheck(final Location l) {
-        int checks = 1;
+        //int checks = 1;
         if (!(Bukkit.getServer().getPluginManager().getPlugin("Factions") == null)) {
             if (RandomCoords.getPlugin().config.getString("Factions").equals("true")) {
                 final int X = l.getBlockX();
@@ -49,7 +49,7 @@ public class FactionChecker {
 
                             }
                         x++;
-                            checks++;
+                            //checks++;
                         }
                        z++;
                         x = bx;

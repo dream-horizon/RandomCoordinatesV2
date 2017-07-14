@@ -65,7 +65,7 @@ public class Others implements CommandInterface {
             } //If the command longer than just /RC player {args}
             else if(args.length > 1) {
                 //Filter over all of the arguments.
-                Map modesUsed = commonMethods.processCommonArguments(args, true);
+            	Map<ArgMode, Object> modesUsed = commonMethods.processCommonArguments(args, true);
 
                 if(modesUsed.containsKey(ArgMode.WORLDNOTEXIST) && ! ((String) modesUsed.get(ArgMode.WORLDNOTEXIST)).contains("player:")) {
 

@@ -20,7 +20,7 @@
 package com.jolbol1.RandomCoordinates.commands;
 
 import com.jolbol1.RandomCoordinates.commands.handler.CommandInterface;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -36,7 +36,7 @@ import java.util.logging.Level;
 public class RegionCommand implements CommandInterface {
 
     private MessageManager messages = new MessageManager();
-    private Coordinates coordinates = new Coordinates();
+    //private Coordinates coordinates = new Coordinates();
     private com.jolbol1.RandomCoordinates.managers.RegionManager regionManager;
 
     @Override

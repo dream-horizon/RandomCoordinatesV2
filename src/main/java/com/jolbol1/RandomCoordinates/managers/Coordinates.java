@@ -244,6 +244,13 @@ public class Coordinates {
             case WARPWORLD:
                 name = "Warps";
                 break;
+			case JOINWORLD:
+				name = "JoinWorld";
+				break;
+			default:
+				name = "Command";
+				costName = "CommandCost";
+				break;
 
         }
 
@@ -1452,7 +1459,7 @@ public class Coordinates {
         if (!RandomCoords.getPlugin().setupEconomy() || cost == 0) {
             return true;
         } else {
-            final EconomyResponse r = RandomCoords.getPlugin().econ.withdrawPlayer(p, cost);
+            final EconomyResponse r = RandomCoords.econ.withdrawPlayer(p, cost);
             if (r.transactionSuccess()) {
                 messages.charged(p, cost);
                 return true;
@@ -1472,7 +1479,7 @@ public class Coordinates {
      * @return True or False, do they have the money?
      */
     public boolean hasMoney(final Player p, final double cost) {
-        return !RandomCoords.getPlugin().setupEconomy() || cost == 0 || cost <= RandomCoords.getPlugin().econ.getBalance(p);
+        return !RandomCoords.getPlugin().setupEconomy() || cost == 0 || cost <= RandomCoords.econ.getBalance(p);
     }
 
     //1000 max, 5444min

@@ -45,13 +45,13 @@ public class CommonMethods {
 
 
 
-    public Map processCommonArguments(String[] arg) {
+    public Map<ArgMode, Object> processCommonArguments(String[] arg) {
         return processCommonArguments(arg, false);
     }
 
 
-    public Map processCommonArguments(String[] arg, boolean playerNeeded) {
-        Map modesUsed = new HashMap<ArgMode, Object>();
+    public Map<ArgMode, Object> processCommonArguments(String[] arg, boolean playerNeeded) {
+    	Map<ArgMode, Object> modesUsed = new HashMap<ArgMode, Object>();
         ArgMode argMode = ArgMode.NONE;
         int argNumber = 0;
         for(String s : arg) {
@@ -103,8 +103,8 @@ public class CommonMethods {
         return modesUsed;
     }
 
-    public Map processCommonArguments(String[] arg, boolean playerNeeded, boolean portals) {
-        Map modesUsed = new HashMap<ArgMode, Object>();
+    public Map<ArgMode, Object> processCommonArguments(String[] arg, boolean playerNeeded, boolean portals) {
+        Map<ArgMode, Object> modesUsed = new HashMap<ArgMode, Object>();
         ArgMode argMode = ArgMode.NONE;
         int argNumber = 0;
         for(String s : arg) {

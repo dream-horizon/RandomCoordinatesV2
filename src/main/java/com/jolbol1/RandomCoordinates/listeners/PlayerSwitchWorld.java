@@ -20,7 +20,7 @@
 package com.jolbol1.RandomCoordinates.listeners;
 
 import com.jolbol1.RandomCoordinates.RandomCoords;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.CoordinatesManager;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ import java.util.List;
  */
 public class PlayerSwitchWorld implements Listener {
 
-    private final Coordinates coordinates = new Coordinates();
+    //private final Coordinates coordinates = new Coordinates();
     private final CoordinatesManager coordinatesManager = new CoordinatesManager();
 
     @EventHandler

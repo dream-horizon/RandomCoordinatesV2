@@ -21,7 +21,7 @@ package com.jolbol1.RandomCoordinates.commands;
 
 import com.jolbol1.RandomCoordinates.RandomCoords;
 import com.jolbol1.RandomCoordinates.commands.handler.CommandInterface;
-import com.jolbol1.RandomCoordinates.managers.Coordinates;
+//import com.jolbol1.RandomCoordinates.managers.Coordinates;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import com.jolbol1.RandomCoordinates.managers.Util.ArgMode;
 import org.bukkit.Bukkit;
@@ -38,9 +38,9 @@ import java.util.Map;
 public class WorldSettings implements CommandInterface {
 
     private final MessageManager messages = new MessageManager();
-    private final Coordinates coordinates = new Coordinates();
+    //private final Coordinates coordinates = new Coordinates();
     private final CommonMethods commonMethods = new CommonMethods();
-    private int key = 574272099;
+    //private int key = 574272099;
 
     @Override
     public void onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
@@ -48,19 +48,19 @@ public class WorldSettings implements CommandInterface {
 
             //Player p = (Player) sender;
             //Set max to default if not provided.
-            int max = key;
+            //int max = key;
             //Set min to default if not provided.
-            int min = key;
+            //int min = key;
             //Set worldName to none - This is REQUIRED
             String worldName = null;
             //Set center to null
             Location center = null;
             //Set mode to null
-            String mode = null;
+            //String mode = null;
             //Are we deleteing?
             boolean delete = false;
             //Go through all the args and assign the appropriate values.
-            Map modeUsed = commonMethods.processCommonArguments(args);
+            Map<ArgMode, Object> modeUsed = commonMethods.processCommonArguments(args);
 
             if(modeUsed.containsKey(ArgMode.WORLD) && Bukkit.getWorld((String) modeUsed.get(ArgMode.WORLD)) != null) {
                 worldName = (String) modeUsed.get(ArgMode.WORLD);

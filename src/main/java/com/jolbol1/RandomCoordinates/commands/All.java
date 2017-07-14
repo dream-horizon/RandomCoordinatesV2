@@ -70,7 +70,7 @@ public class All implements CommandInterface {
             }  // Else if there are more arguments.
             else if(args.length > 1) {
                 //Run through all the arguments
-                Map modesUsed = commonMethods.processCommonArguments(args);
+            	Map<ArgMode, Object> modesUsed = commonMethods.processCommonArguments(args);
 
                 if(modesUsed.containsKey(ArgMode.WORLDNOTEXIST)) {
                     if(! ((String) modesUsed.get(ArgMode.WORLDNOTEXIST)).contains("from:") && Bukkit.getWorld((String) modesUsed.get(ArgMode.WORLDNOTEXIST)) == null) {

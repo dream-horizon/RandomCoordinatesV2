@@ -50,11 +50,11 @@ public class WarpsNew implements CommandInterface {
     @Override
     public void onCommand(final CommandSender sender, final Command cmd, final String commandLabel, final String[] args) {
         if(args.length >= 1 && args[0].equalsIgnoreCase("warp")) {
-            String mode = null;
-            String name = null;
+            //String mode = null;
+            //String name = null;
             String playerName = null;
             String worldName = null;
-            Map modesUsed = processArguments(args);
+            Map<ArgMode, Object> modesUsed = processArguments(args);
 
             //Did they do /RC warp... Create?
             if(modesUsed.containsKey(ArgMode.CREATE)) {
