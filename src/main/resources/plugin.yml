@@ -3,7 +3,7 @@ main: com.jolbol1.RandomCoordinates.RandomCoords
 version: 2.1.0-RELEASE
 website: http://bukkit.org
 author: Jolbol1
-softdepend: [Factions, MassiveCore, WorldEdit, WorldBorder, Vault, WorldGuard, Essentials, Towny, Residence, RedProtect, Kingdoms, GriefPrevention]
+softdepend: [Factions, MassiveCore, WorldEdit, WorldBorder, Vault, WorldGuard, Essentials, Towny, Residence, RedProtect, Kingdoms, GriefPrevention, PlotSquared]
 description: >
              Get away quick with a random coordinate.
 commands:

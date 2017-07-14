@@ -33,6 +33,7 @@ Teleporting to a random location could be dangerous, there could be lava etc. Th
 * WorldBorder plugin
 * Vanilla World Border
 * Nearby Players
+* PlotSquared
 
 ---
 ![Portals](http://i.imgur.com/rIvwyS6.png)

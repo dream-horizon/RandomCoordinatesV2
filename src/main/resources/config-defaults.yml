@@ -27,6 +27,7 @@ Kingdoms: false
 VanillaBorder: true
 SkyBlock: false
 Residence: false
+PlotSquared: false
 Regions:
  - example
 

@@ -75,6 +75,9 @@ public class CoordinatesManager {
     private final RedProtect redProtect = new RedProtect();
     //Load up KingdomsClaim
     private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
+    //Load up PlotSquaredChecker
+    private final PlotSquaredChecker ps = new PlotSquaredChecker();
+    
     //Grab an instance of the debug manager.
     //private final DebugManager debugManager = new DebugManager();
 
@@ -229,7 +232,7 @@ public class CoordinatesManager {
         return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
                 !fc.factionLandNearby(location) && !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
                 !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location) &&
-                !residenceCheck.isChunkProtected(location);
+                !residenceCheck.isChunkProtected(location) && !ps.PlotSquaredCheck(location);
     }
 
 

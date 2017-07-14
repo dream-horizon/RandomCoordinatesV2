@@ -43,6 +43,10 @@
 			<id>bstats-repo</id>
 			<url>http://repo.bstats.org/content/repositories/releases/</url>
 		</repository>
+	    <repository>
+	    	<id>PlotSquared</id>
+	    	<url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
+	    </repository>		
 	</repositories>
 
 	<pluginRepositories>
@@ -132,7 +136,11 @@
 			<version>0.1.4</version>
 			<systemPath>${basedir}\src\lib\GLib.jar</systemPath>		
 		</dependency>
-
+		<dependency>
+		    <groupId>com.plotsquared</groupId>
+		    <artifactId>plotsquared-api</artifactId>
+		    <version>latest</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
