@@ -320,7 +320,7 @@ public class Coordinates {
         	int attempts = 0;
             Location center;
             Location locationTP;        	
-            Benchmark benchmark = new Benchmark();
+            Benchmark benchmark = new Benchmark("Coordinates.exitLoop.AttemptsPerTick");
             int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
             
             @Override
@@ -368,6 +368,7 @@ public class Coordinates {
     	                 * Standard check to see if something has gone wrong. If the location is null, then cancel. Seldom use.
     	                 */
     	                if (locationTP == null) {
+    	                	benchmark.stop();
     	                    return;
     	                }
     	                /**
@@ -691,161 +692,183 @@ public class Coordinates {
      * @param timeBefore How long to actually wait before teleporting.
      * @param cooldown How long until they can teleport again.
      */
-    private void scheduleStuff(final Player player, final Location locationTP, final double thisCost, final double health, final Location start, final int timeBefore, final int cooldown, final CoordType coordType) {
-        //Setup an instance of Bukkit scheduler.
-        final BukkitScheduler s = RandomCoords.getPlugin().getServer().getScheduler();
-        //Setup an instance of the cooldown labelled command.
-        final Cooldown cool = new Cooldown(player.getUniqueId(), "Command", cooldown);
+	private void scheduleStuff(final Player player, final Location locationTP, final double thisCost,
+			final double health, final Location start, final int timeBefore, final int cooldown,
+			final CoordType coordType) {
+		// Setup an instance of Bukkit scheduler.
+		final BukkitScheduler s = RandomCoords.getPlugin().getServer().getScheduler();
+		// Setup an instance of the cooldown labelled command.
+		final Cooldown cool = new Cooldown(player.getUniqueId(), "Command", cooldown);
 
-        /**
-         * Starts the scheduler that handles all of the teleportation, and move check processes.
-         * All inside here activates after the TimeBefore period.
-         */
-        s.scheduleSyncDelayedTask(RandomCoords.getPlugin().getInstance(), () -> {
-            /**
-             * Checks if we should stop the teleportation on move.
-             * If true, we then check if they have moved.
-             * If yes, the proccess is cancelled and we send them the move message.
-             */
-            if (RandomCoords.getPlugin().config.getString("StopOnMove").equalsIgnoreCase("true")) {
-                /**
-                 * This is where we check if they have moved using the variables provided in the parameters.
-                  */
-               if(!coordType.equals(CoordType.JOINWORLD)) {
-                   if ((start.getWorld() != player.getWorld())  || (start.distance(player.getLocation()) > 1)) {
-                       messages.youMoved(player);
-                       return;
-                   }
-               }
-            }
-            /**
-             * Checks if we should cancel the teleport on damage.
-             */
-            if (RandomCoords.getPlugin().config.getString("StopOnCombat").equalsIgnoreCase("true")) {
-                /**
-                 * This is where we check the health of the player VS. the health of the player at the start of the scheduler.
-                 * If the health is lower, Cancel the teleport as they have taken damage.
-                 */
-                if (health > player.getHealth()) {
-                    messages.tookDamage(player);
-                    return;
-                }
-            }
-            //Sets the variable for the chunk loader as false so that it continues to loop.
-            boolean exit = false;
-            /**
-             * The loop that handles the loading of the chunk that they are teleporting into.
-             * If the config options false, Exit the loop. If the chunks generated, exit the loop.
-             */
-            while (!exit) {
-                //The boolean thats used to cancel or continue the loop. If chunk loader is off, set as true. If chunk is generated set as trie.
-                exit = RandomCoords.getPlugin().config.getString("ChunkLoader").equalsIgnoreCase("false") || generateChunk(locationTP);
-                /**
-                 * If exit is true, Charge the player, and teleport them.
-                 * Then start the cooldown.
-                 */
-                if (exit) {
+		/**
+		 * Starts the scheduler that handles all of the teleportation, and move
+		 * check processes. All inside here activates after the TimeBefore
+		 * period.
+		 */
+		s.runTaskLater(RandomCoords.getPlugin(), new Runnable() {
+			/**
+			 * Checks if we should stop the teleportation on move. If true, we
+			 * then check if they have moved. If yes, the proccess is cancelled
+			 * and we send them the move message.
+			 */
 
+			@Override
+			public void run() {
+				if (RandomCoords.getPlugin().config.getString("StopOnMove").equalsIgnoreCase("true")) {
+					/**
+					 * This is where we check if they have moved using the
+					 * variables provided in the parameters.
+					 */
+					if (!coordType.equals(CoordType.JOINWORLD)) {
+						if ((start.getWorld() != player.getWorld()) || (start.distance(player.getLocation()) > 1)) {
+							messages.youMoved(player);
+							return;
+						}
+					}
+				}
+				/**
+				 * Checks if we should cancel the teleport on damage.
+				 */
+				if (RandomCoords.getPlugin().config.getString("StopOnCombat").equalsIgnoreCase("true")) {
+					/**
+					 * This is where we check the health of the player VS. the
+					 * health of the player at the start of the scheduler. If
+					 * the health is lower, Cancel the teleport as they have
+					 * taken damage.
+					 */
+					if (health > player.getHealth()) {
+						messages.tookDamage(player);
+						return;
+					}
+				}
+				// Sets the variable for the chunk loader as false so that it
+				// continues to loop.
+				boolean exit = false;
+				/**
+				 * The loop that handles the loading of the chunk that they are
+				 * teleporting into. If the config options false, Exit the loop.
+				 * If the chunks generated, exit the loop.
+				 */
+				while (!exit) {
+					// The boolean thats used to cancel or continue the loop. If
+					// chunk loader is off, set as true. If chunk is generated
+					// set as trie.
+					exit = RandomCoords.getPlugin().config.getString("ChunkLoader").equalsIgnoreCase("false")
+							|| generateChunk(locationTP);
+					/**
+					 * If exit is true, Charge the player, and teleport them.
+					 * Then start the cooldown.
+					 */
+					if (exit) {
 
-                    RandomTeleportEvent event = new RandomTeleportEvent(player, locationTP, coordType, cooldown);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
+						RandomTeleportEvent event = new RandomTeleportEvent(player, locationTP, coordType, cooldown);
+						Bukkit.getServer().getPluginManager().callEvent(event);
 
-                    if (!event.isCancelled()) {
-                        //Teleports the player finally to the safe location
-                        event.getPlayer().teleport(event.location());
+						if (!event.isCancelled()) {
+							// Teleports the player finally to the safe location
+							event.getPlayer().teleport(event.location());
 
+							if (event.coordType().equals(CoordType.JOIN)
+									|| event.coordType().equals(CoordType.JOINWORLD)) {
+								if (RandomCoords.getPlugin().config.get("OnJoinCommand") instanceof String) {
+									if (RandomCoords.getPlugin().config.getString("OnJoinCommand")
+											.equalsIgnoreCase("none")) {
+										return;
+									}
 
+									Bukkit.getServer().dispatchCommand(event.getPlayer(),
+											RandomCoords.getPlugin().config.getString("OnJoinCommand"));
 
-                        if(event.coordType().equals(CoordType.JOIN) || event.coordType().equals(CoordType.JOINWORLD)) {
-                            if (RandomCoords.getPlugin().config.get("OnJoinCommand") instanceof String) {
-                                if (RandomCoords.getPlugin().config.getString("OnJoinCommand").equalsIgnoreCase("none")) {
-                                    return;
-                                }
+								} else if (RandomCoords.getPlugin().config.get("OnJoinCommand") instanceof List) {
+									if (RandomCoords.getPlugin().config.getStringList("OnJoinCommand")
+											.contains("none")) {
+										return;
+									}
 
-                                Bukkit.getServer().dispatchCommand(event.getPlayer(), RandomCoords.getPlugin().config.getString("OnJoinCommand"));
+									for (String n : RandomCoords.getPlugin().config.getStringList("OnJoinCommand")) {
+										Bukkit.getServer().dispatchCommand(event.getPlayer(), n);
 
-                            } else if (RandomCoords.getPlugin().config.get("OnJoinCommand") instanceof List) {
-                                if (RandomCoords.getPlugin().config.getStringList("OnJoinCommand").contains("none")) {
-                                    return;
-                                }
+									}
+								}
+							}
 
-                                for (String n : RandomCoords.getPlugin().config.getStringList("OnJoinCommand")) {
-                                    Bukkit.getServer().dispatchCommand(event.getPlayer(), n);
+							// Should we put a bonus chest at this location?
+							bonusChests(event.getPlayer(), event.location());
+							// Adds 1 To successful teleports for metrcis.
+							RandomCoords.getPlugin().successTeleports++;
+							// Start the cooldown.
+							cool.start();
+							/**
+							 * Checks if we should play a sound. If so try to,
+							 * If the config is set wrong log it.
+							 */
+							if (!RandomCoords.getPlugin().config.getString("Sound").equalsIgnoreCase("false")) {
+								// Get the name of the sound to be played.
+								final String soundName = RandomCoords.getPlugin().config.getString("Sound");
+								/**
+								 * Attempts to play the sound at the location
+								 * they have teleported to. Catches if the
+								 * config is typed incorrectly and will log
+								 * this.
+								 */
+								try {
+									// Play the sound.
+									player.playSound(locationTP, Sound.valueOf(soundName), 1, 1);
+								} catch (IllegalArgumentException e) {
+									// Log if the sound is incorrect.
+									Bukkit.getServer().getLogger().log(Level.WARNING,
+											"Sound: " + soundName + " does not exist!");
+								}
 
-                                }
-                            }
-                        }
+							}
+							/**
+							 * Checks if we should play an effect. If so try it,
+							 * If the config is set incorrectly, Log it.
+							 */
+							if (!RandomCoords.getPlugin().config.getString("Effect").equalsIgnoreCase("false")) {
+								// Get the effect name from the config.
+								final String effectName = RandomCoords.getPlugin().config.getString("Effect");
+								/**
+								 * Try to play the effect at the players
+								 * location. Catch if the config is set
+								 * incorrectly and log that.
+								 */
+								try {
+									// Play the effect at the location
+									locationTP.getWorld().playEffect(locationTP, Effect.valueOf(effectName), 1);
+								} catch (IllegalArgumentException e) {
+									// Log the fact that the config is
+									// incorrect.
+									Bukkit.getServer().getLogger().log(Level.WARNING,
+											"Effect: " + effectName + " does not exist!");
+								}
 
-                        //Should we put a bonus chest at this location?
-                        bonusChests(event.getPlayer(), event.location());
-                        //Adds 1 To successful teleports for metrcis.
-                        RandomCoords.getPlugin().successTeleports++;
-                        //Start the cooldown.
-                        cool.start();
-                        /**
-                         * Checks if we should play a sound.
-                         * If so try to, If the config is set wrong log it.
-                         */
-                        if (!RandomCoords.getPlugin().config.getString("Sound").equalsIgnoreCase("false")) {
-                            //Get the name of the sound to be played.
-                            final String soundName = RandomCoords.getPlugin().config.getString("Sound");
-                            /**
-                             * Attempts to play the sound at the location they have teleported to.
-                             * Catches if the config is typed incorrectly and will log this.
-                             */
-                            try {
-                                //Play the sound.
-                                player.playSound(locationTP, Sound.valueOf(soundName), 1, 1);
-                            } catch (IllegalArgumentException e) {
-                                //Log if the sound is incorrect.
-                                Bukkit.getServer().getLogger().log(Level.WARNING, "Sound: " + soundName + " does not exist!");
-                            }
+							}
+							/**
+							 * This starts the cooldown for the suffocation
+							 * check. This is what is checked for in the
+							 * Suffocation class.
+							 */
+							final Cooldown c = new Cooldown(player.getUniqueId(), "Invul", 30);
+							c.start();
+							/**
+							 * Start the Invul timer, This is used if the users
+							 * would like the players to be invul for a while
+							 * after TP.
+							 */
+							final Cooldown cT = new Cooldown(player.getUniqueId(), "InvulTime",
+									RandomCoords.getPlugin().config.getInt("InvulTime"));
+							cT.start();
+							// Send the message that they have teleported.
+							messages.teleportMessage(player, locationTP);
+						}
+					}
+					;
+				}
+			}
 
-
-                        }
-                        /**
-                         * Checks if we should play an effect.
-                         * If so try it, If the config is set incorrectly, Log it.
-                         */
-                        if (!RandomCoords.getPlugin().config.getString("Effect").equalsIgnoreCase("false")) {
-                            //Get the effect name from the config.
-                            final String effectName = RandomCoords.getPlugin().config.getString("Effect");
-                            /**
-                             * Try to play the effect at the players location.
-                             * Catch if the config is set incorrectly and log that.
-                             */
-                            try {
-                                //Play the effect at the location
-                                locationTP.getWorld().playEffect(locationTP, Effect.valueOf(effectName), 1);
-                            } catch (IllegalArgumentException e) {
-                                //Log the fact that the config is incorrect.
-                                Bukkit.getServer().getLogger().log(Level.WARNING, "Effect: " + effectName + " does not exist!");
-                            }
-
-
-                        }
-                        /**
-                         * This starts the cooldown for the suffocation check. This is what is checked for in the Suffocation class.
-                         */
-                        final Cooldown c = new Cooldown(player.getUniqueId(), "Invul", 30);
-                        c.start();
-                        /**
-                         * Start the Invul timer, This is used if the users would like the players to be invul for a while after TP.
-                         */
-                        final Cooldown cT = new Cooldown(player.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
-                        cT.start();
-                        //Send the message that they have teleported.
-                        messages.teleportMessage(player, locationTP);
-                    }
-
-
-
-                }
-            }
-
-
-        }, timeBefore * 20L);
-    }
+		}, Math.max(timeBefore * 20L, 1));
+	}
 
 
     /**

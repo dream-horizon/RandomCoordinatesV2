@@ -312,7 +312,7 @@ public class CoordinatesManager {
     		int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
     		boolean isItSafe = false;
     		Location randomLocation = null; 
-    		Benchmark benchmark = new Benchmark();
+    		Benchmark benchmark = new Benchmark("CoordinatesManager.teleportToSafeRandomLocation.AttemptsPerTick");
     		
 			@Override
 			public void run() {
@@ -333,7 +333,6 @@ public class CoordinatesManager {
 			            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
 			            	randomLocation = end.endCoord(randomLocation);
 			            }
-			            
 			            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
 			            benchmark.stop();
 						this.cancel();
@@ -456,59 +455,61 @@ public class CoordinatesManager {
         if(coordType == CoordType.JOIN || coordType == CoordType.JOINWORLD) {
             timeBeforeTp = 0.3;
         }
+        
+
+        scheduler.runTaskLater(RandomCoords.getPlugin(), new Runnable() {
+        	
+        	@Override
+        	public void run() {
+                RandomTeleportEvent event = new RandomTeleportEvent(player, randomLocation, coordType, cooldownTime);
+                
+                Bukkit.getServer().getPluginManager().callEvent(event);
 
 
-        scheduler.scheduleSyncDelayedTask(RandomCoords.getPlugin().getInstance(), () -> {
-            RandomTeleportEvent event = new RandomTeleportEvent(player, randomLocation, coordType, cooldownTime);
-            
-            Bukkit.getServer().getPluginManager().callEvent(event);
+                if(coordType != CoordType.JOIN && coordType != CoordType.JOINWORLD && coordType != CoordType.SIGN && coordType != CoordType.PORTAL) {
+                    if (hasThePlayerMoved(player, start)) {
+                        messages.youMoved(player);
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
 
-
-            if(coordType != CoordType.JOIN && coordType != CoordType.JOINWORLD && coordType != CoordType.SIGN && coordType != CoordType.PORTAL) {
-                if (hasThePlayerMoved(player, start)) {
-                    messages.youMoved(player);
+                if(isPlayerInCombat(player, startHealth)) {
+                    messages.tookDamage(player);
                     event.setCancelled(true);
                     return;
                 }
-            }
-
-            if(isPlayerInCombat(player, startHealth)) {
-                messages.tookDamage(player);
-                event.setCancelled(true);
-                return;
-            }
-            
-            if (!event.isCancelled()) {
-                if(!chargePlayer(player, cost)) { return;}
-                cooldown.start();
+                
+                if (!event.isCancelled()) {
+                    if(!chargePlayer(player, cost)) { return;}
+                    cooldown.start();
 
 
-                messages.teleportMessage(player, randomLocation);
-                player.teleport(randomLocation);
-                performOnJoinCommands(event);
-                playEffectAtLocation(randomLocation);
-                playSoundtLocation(player, randomLocation);
-                addOneToLimiter(player, coordType);
+                    messages.teleportMessage(player, randomLocation);
+                    player.teleport(randomLocation);
+                    performOnJoinCommands(event);
+                    playEffectAtLocation(randomLocation);
+                    playSoundtLocation(player, randomLocation);
+                    addOneToLimiter(player, coordType);
 
 
-                if(coordType == CoordType.JOIN){ bonusChests(player, randomLocation); }
+                    if(coordType == CoordType.JOIN){ bonusChests(player, randomLocation); }
 
-                /**
-                 * Start the suffocation timer.
-                 */
-                final Cooldown c = new Cooldown(player.getUniqueId(), "Invul", 30);
-                c.start();
-                /**
-                 * Start the Invul timer, This is used if the users would like the players to be invul for a while after TP.
-                 */
-                final Cooldown cT = new Cooldown(player.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
-                cT.start();
-
-            }
-
-
+                    /**
+                     * Start the suffocation timer.
+                     */
+                    final Cooldown c = new Cooldown(player.getUniqueId(), "Invul", 30);
+                    c.start();
+                    /**
+                     * Start the Invul timer, This is used if the users would like the players to be invul for a while after TP.
+                     */
+                    final Cooldown cT = new Cooldown(player.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
+                    cT.start();
+                }
+        	}
+        	
             //My definition of a tick/second here is shorter. This is due to a double tp bug with portals.
-        }, (long) (timeBeforeTp * 20) - 1);
+        }, Math.max(((long) (timeBeforeTp * 20) - 1), 1L));
 
     }
 

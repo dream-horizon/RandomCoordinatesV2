@@ -15,16 +15,22 @@ public class Benchmark {
 	final DebugManager debugmanager=new DebugManager();
 	StackTraceElement[] stackTrace;
 	final Random rand;
+	String name = "";
 	
 	public Benchmark() {
 		rand = new Random();
 	}
 	
+	public Benchmark(String name) {
+		rand = new Random();
+		this.name = name;
+	}
+	
 	public void start() {
 		if (RandomCoords.getPlugin().config.getString("debug").equals("true") && benchmarkTask == null) {
-			benchmarkId= Integer.toHexString(rand.nextInt(0xFF + 1));
+			benchmarkId= Integer.toHexString(rand.nextInt(0xFFFFFF + 1));
 			stackTrace = Thread.currentThread().getStackTrace();
-			debugmanager.logToFile("Beginning Benchmark! ID: " + benchmarkId);
+			debugmanager.logToFile("Beginning Benchmark " + name + "! ID: " + benchmarkId);
 			benchmarkTask = RandomCoords.getPlugin().getServer().getScheduler().runTaskTimer(RandomCoords.getPlugin(),
 					new Runnable() {
 
@@ -43,7 +49,7 @@ public class Benchmark {
 			millis = System.currentTimeMillis() - millis;
 			benchmarkTask.cancel();
 			float averageTPS = (float)ticks/((float) millis / 1000F);
-			debugmanager.logToFile("Benchmark " + benchmarkId + " finished!");
+			debugmanager.logToFile("Benchmark " + name + " ID: " + benchmarkId + " finished!");
 			debugmanager.logToFile("\tTime passed: " + millis + " ms");
 			debugmanager.logToFile("\tTicks passed: " + ticks + " Ticks");	
 			debugmanager.logToFile("\tAverage Ticks per second: " + averageTPS + " TPS");

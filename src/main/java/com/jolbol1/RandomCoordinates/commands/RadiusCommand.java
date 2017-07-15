@@ -113,7 +113,7 @@ public class RadiusCommand implements CommandInterface {
     		int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
     		boolean isItSafe = false;
     		Location randomLocationFirst = null;
-    		Benchmark benchmark = new Benchmark();
+    		Benchmark benchmark = new Benchmark("RadiusCommand.teleportRadius.AttemptsPerTick");
     		
 			@Override
 			public void run() {
