@@ -455,8 +455,9 @@ public class CoordinatesManager {
         if(coordType == CoordType.JOIN || coordType == CoordType.JOINWORLD) {
             timeBeforeTp = 0.3;
         }
-        
 
+        debugManager.logToFile("timeBeforeTp in ticks to schedule: " + ((long) (timeBeforeTp * 20) - 1));
+        debugManager.logToFile("timeBeforeTp corrected: " + Math.max(((long) (timeBeforeTp * 20) - 1), 1L));
         scheduler.runTaskLater(RandomCoords.getPlugin(), new Runnable() {
         	
         	@Override
