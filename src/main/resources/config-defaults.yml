@@ -7,6 +7,7 @@ TimeBeforeTeleport: 5
 MaxAttempts: 20
 AttemptsPerTick: 1
 TicksBetweenAttempts: 3
+InformPlayerAfterAttempts: 50
 RandomOrg: false
 StopOnMove: true
 StopOnCombat: true

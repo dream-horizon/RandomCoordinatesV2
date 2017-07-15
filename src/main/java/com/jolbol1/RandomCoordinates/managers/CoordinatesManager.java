@@ -313,42 +313,50 @@ public class CoordinatesManager {
     		boolean isItSafe = false;
     		Location randomLocation = null; 
     		Benchmark benchmark = new Benchmark("CoordinatesManager.teleportToSafeRandomLocation.AttemptsPerTick");
+    		boolean fin=false;
+    		int informPlayerAttempts = RandomCoords.getPlugin().config.getInt("InformPlayerAfterAttempts");
     		
 			@Override
 			public void run() {
-				benchmark.start();
-				for(int i=0; i<=attemptsPerTick;i++) {
-		            //Get a random relative location with provided bounds.
-		            randomLocation = getRelativeRandomLocation(world, min, max);
-		            isItSafe = isTheLocationSafe(randomLocation);					
-					
-					if(isItSafe) {
-						//Found safe Coordinates
-			            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
-			                double y = getSafeY(randomLocation);
-			                randomLocation.setY(y);
+				if(!fin) {
+					benchmark.start();
+					for(int i=0; i<attemptsPerTick;i++) {
+			            //Get a random relative location with provided bounds.
+			            randomLocation = getRelativeRandomLocation(world, min, max);
+			            isItSafe = isTheLocationSafe(randomLocation);					
+						
+						if(isItSafe) {
+							//Found safe Coordinates
+				            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
+				                double y = getSafeY(randomLocation);
+				                randomLocation.setY(y);
+				            }
+				            
+				            //TODO: Is double implemented
+				            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
+				            	randomLocation = end.endCoord(randomLocation);
+				            }
+				            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
+				            benchmark.stop();
+				            fin=true;
+							this.cancel();
+							return;
+						}
+						
+						if(attempts == informPlayerAttempts) {
+							messages.takesLonger(player);
+						}	
+						
+			            if(attempts == maxAttempts) {
+			            	//Max Attempts reached
+			                messages.couldntFind(player); 
+			                benchmark.stop();
+			                fin=true;
+			            	this.cancel();
+			            	return;
 			            }
-			            
-			            //TODO: Is double implemented
-			            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
-			            	randomLocation = end.endCoord(randomLocation);
-			            }
-			            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
-			            benchmark.stop();
-						this.cancel();
+			            attempts++;					
 					}
-					
-					if(attempts == 50) {
-						messages.takesLonger(player);
-					}					
-					
-		            if(attempts == maxAttempts) {
-		            	//Max Attempts reached
-		                messages.couldntFind(player); 
-		                benchmark.stop();
-		            	this.cancel();
-		            }
-		            attempts++;					
 				}
 			}
     	}.runTaskTimer(RandomCoords.getPlugin(), 0L, RandomCoords.getPlugin().config.getLong("TicksBetweenAttempts"));
