@@ -24,6 +24,7 @@ import com.jolbol1.RandomCoordinates.RandomCoords;
 import com.jolbol1.RandomCoordinates.checks.*;
 import com.jolbol1.RandomCoordinates.cooldown.Cooldown;
 import com.jolbol1.RandomCoordinates.event.RandomTeleportEvent;
+import com.jolbol1.RandomCoordinates.managers.Util.Benchmark;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
@@ -319,59 +320,66 @@ public class Coordinates {
         	int attempts = 0;
             Location center;
             Location locationTP;        	
-			
+            Benchmark benchmark = new Benchmark();
+            int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
+            
             @Override
 			public void run() {
 	            /**
 	             * If the number of attempts has reached the maximum, Then kill the loop.
 	             */	
-	            if (attempts >= maxAttempts) {
-	                messages.couldntFind(player);
-	                RandomCoords.getPlugin().failedTeleports++;
-	                this.cancel();
-	            }
-	            
-				if(attempts == 50) {
-					messages.takesLonger(player);
-				}	            
-	            
-	            locationTP = getRandomCoordinates(player, max, min, world);
-	            //Get the coordinate that is going to be tested.
-	            locationTP = getRandomCoordinates(player, max, min, world);
-	            //Get the boundary center of the world.
-	            center = new Location(world, getCenterX(world), locationTP.getY(), getCenterZ(world));
-	            
-	            /**
-	             * If the location is not safe, or isnt in the circular radius, then add to the attempts.
-	             * Otherwise, Start the proccess of teleporting, Such as cooldowns, time befores and limiter checks.
-	             */
-	            if (!isLocSafe(locationTP) || circleRadius(locationTP, max, center)) {
-	                //Adds to attempts.
-	                attempts++;
-	                debugManager.logToFile("\n" + attempts + "LocSafe: " + String.valueOf(isLocSafe(locationTP)) + " Circle: " + String.valueOf(circleRadius(locationTP, max, center)) + "\n");
-	                //Keeps the loop going.
-	            }
-	            else{
-	                //Sets the location. Mainly used to set it to a warp if that is the coord type.
-	                locationTP = shouldWarp(player, world, locationTP, name, type);
-	                //Adds the buffer to the teleport location
-	                if(!(type == CoordType.WARPWORLD || type == CoordType.WARPS)) {
-	                    locationTP = addBuffer(locationTP);
-	                }
-	                /**
-	                 * Standard check to see if something has gone wrong. If the location is null, then cancel. Seldom use.
-	                 */
-	                if (locationTP == null) {
-	                    return;
-	                }
-	                /**
-	                 * Then schedule the final teleport.
-	                 */
-	                limiterApplys(player, name);
-	                scheduleStuff(player, locationTP, thisCost, player.getHealth(), player.getLocation(), timeBefore, cooldown, type);
-	                //Stops the loop.
-	                this.cancel();
-	            }
+            	benchmark.start();
+            	for(int i=0; i<=attemptsPerTick;i++) {
+    	            if (attempts >= maxAttempts) {
+    	                messages.couldntFind(player);
+    	                RandomCoords.getPlugin().failedTeleports++;
+    	                benchmark.stop();
+    	                this.cancel();
+    	            }
+    	            
+    				if(attempts == 50) {
+    					messages.takesLonger(player);
+    				}	            
+    	            
+    	            locationTP = getRandomCoordinates(player, max, min, world);
+    	            //Get the coordinate that is going to be tested.
+    	            locationTP = getRandomCoordinates(player, max, min, world);
+    	            //Get the boundary center of the world.
+    	            center = new Location(world, getCenterX(world), locationTP.getY(), getCenterZ(world));
+    	            
+    	            /**
+    	             * If the location is not safe, or isnt in the circular radius, then add to the attempts.
+    	             * Otherwise, Start the proccess of teleporting, Such as cooldowns, time befores and limiter checks.
+    	             */
+    	            if (!isLocSafe(locationTP) || circleRadius(locationTP, max, center)) {
+    	                //Adds to attempts.
+    	                attempts++;
+    	                debugManager.logToFile("\n" + attempts + "LocSafe: " + String.valueOf(isLocSafe(locationTP)) + " Circle: " + String.valueOf(circleRadius(locationTP, max, center)) + "\n");
+    	                //Keeps the loop going.
+    	            }
+    	            else{
+    	                //Sets the location. Mainly used to set it to a warp if that is the coord type.
+    	                locationTP = shouldWarp(player, world, locationTP, name, type);
+    	                //Adds the buffer to the teleport location
+    	                if(!(type == CoordType.WARPWORLD || type == CoordType.WARPS)) {
+    	                    locationTP = addBuffer(locationTP);
+    	                }
+    	                /**
+    	                 * Standard check to see if something has gone wrong. If the location is null, then cancel. Seldom use.
+    	                 */
+    	                if (locationTP == null) {
+    	                    return;
+    	                }
+    	                /**
+    	                 * Then schedule the final teleport.
+    	                 */
+    	                limiterApplys(player, name);
+    	                scheduleStuff(player, locationTP, thisCost, player.getHealth(), player.getLocation(), timeBefore, cooldown, type);
+    	                //Stops the loop.
+    	                benchmark.stop();
+    	                this.cancel();
+    	            }
+            	}
 			}
         }.runTaskTimer(RandomCoords.getPlugin(), 0L, 0L);    	
     }

@@ -24,6 +24,7 @@ import com.jolbol1.RandomCoordinates.RandomCoords;
 import com.jolbol1.RandomCoordinates.checks.*;
 import com.jolbol1.RandomCoordinates.cooldown.Cooldown;
 import com.jolbol1.RandomCoordinates.event.RandomTeleportEvent;
+import com.jolbol1.RandomCoordinates.managers.Util.Benchmark;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import com.jolbol1.RandomCoordinates.managers.Util.RandomWorld;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -79,7 +80,7 @@ public class CoordinatesManager {
     private final PlotSquaredChecker ps = new PlotSquaredChecker();
     
     //Grab an instance of the debug manager.
-    //private final DebugManager debugManager = new DebugManager();
+    private final DebugManager debugManager = new DebugManager();
 
     private final BonusChestManager bonusChestManager = new BonusChestManager();
     //Load up ResidenceCheck
@@ -304,49 +305,54 @@ public class CoordinatesManager {
         return randomLocation;
     }
 
-
-    //TODO: Maybe add an Checks per tick function
     public void teleportToSafeRandomLocation(World world, int max, int min, Player player, CoordType coordType, int timeBefore, int cooldownTime, double cost) {
     	new BukkitRunnable() {
     		int attempts = 0;
     		int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
+    		int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
     		boolean isItSafe = false;
     		Location randomLocation = null; 
+    		Benchmark benchmark = new Benchmark();
     		
 			@Override
 			public void run() {
-				if(attempts == 50) {
-					messages.takesLonger(player);
-				}
-				
-				if(isItSafe) {
-					//Found safe Coordinates
-		            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
-		                double y = getSafeY(randomLocation);
-		                randomLocation.setY(y);
+				benchmark.start();
+				for(int i=0; i<=attemptsPerTick;i++) {
+		            //Get a random relative location with provided bounds.
+		            randomLocation = getRelativeRandomLocation(world, min, max);
+		            isItSafe = isTheLocationSafe(randomLocation);					
+					
+					if(isItSafe) {
+						//Found safe Coordinates
+			            if(!RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(world.getName())) {
+			                double y = getSafeY(randomLocation);
+			                randomLocation.setY(y);
+			            }
+			            
+			            //TODO: Is double implemented
+			            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
+			            	randomLocation = end.endCoord(randomLocation);
+			            }
+			            
+			            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
+			            benchmark.stop();
+						this.cancel();
+					}
+					
+					if(attempts == 50) {
+						messages.takesLonger(player);
+					}					
+					
+		            if(attempts == maxAttempts) {
+		            	//Max Attempts reached
+		                messages.couldntFind(player); 
+		                benchmark.stop();
+		            	this.cancel();
 		            }
-		            
-		            //TODO: Is double implemented
-		            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
-		            	randomLocation = end.endCoord(randomLocation);
-		            }
-		            
-		            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
-					this.cancel();
+		            attempts++;					
 				}
-				
-	            if(attempts == maxAttempts) {
-	            	//Max Attempts reached
-	                messages.couldntFind(player); 
-	            	this.cancel();
-	            }
-
-	            //Get a random relative location with provided bounds.
-	            randomLocation = getRelativeRandomLocation(world, min, max);
-	            isItSafe = isTheLocationSafe(randomLocation);
-	            attempts++;
 			}
-    	}.runTaskTimer(RandomCoords.getPlugin(), 0L, 0L);
+    	}.runTaskTimer(RandomCoords.getPlugin(), 0L, RandomCoords.getPlugin().config.getLong("TicksBetweenAttempts"));
     }    
     
     public void randomlyTeleportPlayer(Player player, World world, int max, int min, CoordType coordType, double cost) {

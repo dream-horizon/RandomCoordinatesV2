@@ -5,6 +5,8 @@ CooldownTime: 5
 InvulTime: 10
 TimeBeforeTeleport: 5
 MaxAttempts: 20
+AttemptsPerTick: 1
+TicksBetweenAttempts: 3
 RandomOrg: false
 StopOnMove: true
 StopOnCombat: true

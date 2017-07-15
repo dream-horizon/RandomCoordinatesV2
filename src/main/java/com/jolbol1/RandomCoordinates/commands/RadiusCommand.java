@@ -24,6 +24,8 @@ import com.jolbol1.RandomCoordinates.commands.handler.CommandInterface;
 import com.jolbol1.RandomCoordinates.cooldown.Cooldown;
 import com.jolbol1.RandomCoordinates.managers.CoordinatesManager;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
+import com.jolbol1.RandomCoordinates.managers.Util.Benchmark;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.BlockCommandSender;
@@ -108,60 +110,65 @@ public class RadiusCommand implements CommandInterface {
     	new BukkitRunnable() {
     		int attempts = 0;
     		int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
+    		int attemptsPerTick = RandomCoords.getPlugin().config.getInt("AttemptsPerTick");
     		boolean isItSafe = false;
     		Location randomLocationFirst = null;
+    		Benchmark benchmark = new Benchmark();
     		
 			@Override
 			public void run() {
-				if(attempts == 50) {
-					messages.takesLonger(sender);
-				}
-				
-				if(isItSafe) {
-					Location randomLocation = randomLocationFirst.subtract(0, 2.5, 0);
-					messages.teleportedAll(sender, worldName);
-		            for(Entity e : nearby) {
-		                if(entities == true) {
-		                    if(e instanceof Player) {
-		                        e.teleport(randomLocation);
-		                        messages.teleportedBy(sender, (Player) e);
-		                        messages.teleportMessage((Player) e, randomLocation);
-		                        final Cooldown c = new Cooldown(e.getUniqueId(), "Invul", 30);
-		                        c.start();
-		                        final Cooldown cT = new Cooldown(e.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
-		                        cT.start();
-		                    } else {
-		                        e.teleport(randomLocation);
-		                    }
-		                } else {
-		                    if(e instanceof Player) {
-		                        e.teleport(randomLocation);
-		                        messages.teleportedBy(sender, (Player) e);
-		                        messages.teleportMessage((Player) e, randomLocation);
+				benchmark.start();
+				for(int i=0; i<=attemptsPerTick;i++) {
+		            //Get a random relative location with provided bounds.
+		            randomLocationFirst = coordinatesManager.getRelativeRandomLocation(Bukkit.getWorld(worldName), min, max);
+		            isItSafe = coordinatesManager.isTheLocationSafe(randomLocationFirst);					
 
-		                        final Cooldown c = new Cooldown(e.getUniqueId(), "Invul", 30);
-		                        c.start();
-		                        final Cooldown cT = new Cooldown(e.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
-		                        cT.start();
-		                    }
-		                }
-		            }						
-					this.cancel();
+					if(isItSafe) {
+						Location randomLocation = randomLocationFirst.subtract(0, 2.5, 0);
+						messages.teleportedAll(sender, worldName);
+			            for(Entity e : nearby) {
+			                if(entities == true) {
+			                    if(e instanceof Player) {
+			                        e.teleport(randomLocation);
+			                        messages.teleportedBy(sender, (Player) e);
+			                        messages.teleportMessage((Player) e, randomLocation);
+			                        final Cooldown c = new Cooldown(e.getUniqueId(), "Invul", 30);
+			                        c.start();
+			                        final Cooldown cT = new Cooldown(e.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
+			                        cT.start();
+			                    } else {
+			                        e.teleport(randomLocation);
+			                    }
+			                } else {
+			                    if(e instanceof Player) {
+			                        e.teleport(randomLocation);
+			                        messages.teleportedBy(sender, (Player) e);
+			                        messages.teleportMessage((Player) e, randomLocation);
+
+			                        final Cooldown c = new Cooldown(e.getUniqueId(), "Invul", 30);
+			                        c.start();
+			                        final Cooldown cT = new Cooldown(e.getUniqueId(), "InvulTime", RandomCoords.getPlugin().config.getInt("InvulTime"));
+			                        cT.start();
+			                    }
+			                }
+			            }						
+						this.cancel();
+						benchmark.stop();
+					}
+					
+					if(attempts == 50) {
+						messages.takesLonger(sender);
+					}					
+					
+		            if(attempts == maxAttempts) {
+		            	//Max Attempts reached
+		                messages.couldntFind(sender); 
+		            	this.cancel();
+		            }
+		            attempts++;						
 				}
-				
-	            if(attempts == maxAttempts) {
-	            	//Max Attempts reached
-	                messages.couldntFind(sender); 
-	            	this.cancel();
-	            }
-	            
-	            //Get a random relative location with provided bounds.
-	            randomLocationFirst = coordinatesManager.getRelativeRandomLocation(Bukkit.getWorld(worldName), min, max);
-	            isItSafe = coordinatesManager.isTheLocationSafe(randomLocationFirst);
-	            attempts++;		            
 			}
-    		
-    	}.runTaskTimer(RandomCoords.getPlugin(), 0L, 0L);    	
+    	}.runTaskTimer(RandomCoords.getPlugin(), 0L, RandomCoords.getPlugin().config.getLong("TicksBetweenAttempts"));    	
     }
     
     public Entity[] getNearbyEntities(Location l, int radius) {

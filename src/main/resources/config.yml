@@ -13,6 +13,8 @@ TimeBeforeApplys:
  - Warps
  - Signs
 MaxAttempts: 20
+AttemptsPerTick: 1
+TicksBetweenAttempts: 3
 RandomOrg: false
 StopOnMove: true
 StopOnCombat: true
