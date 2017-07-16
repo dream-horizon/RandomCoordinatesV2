@@ -1,6 +1,10 @@
 # RandomCoordinatesV2
 ![Logo](http://i.imgur.com/AAKjFOE.png)
 ***
+# Downloads
+* You can get most [Recent Builds](https://github.com/PHENOMICAL/RandomCoordinatesV2/releases) here!
+* Build Status: [![Build Status](https://travis-ci.org/PHENOMICAL/RandomCoordinatesV2.svg?branch=master)](https://travis-ci.org/PHENOMICAL/RandomCoordinatesV2)
+***
 # Features
 ![TrulyRandom](http://i.imgur.com/nXXzyfC.png)
 ---

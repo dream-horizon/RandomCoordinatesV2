@@ -113,28 +113,28 @@
 			<artifactId>RedProtect</artifactId>
 			<scope>system</scope>
 			<version>7.2.0-b414</version>
-			<systemPath>${basedir}\src\lib\RedProtect-Spigot-7.2.0-b414.jar</systemPath>
+			<systemPath>${basedir}/lib/RedProtect.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org.bekvon.bukkit</groupId>
 			<artifactId>residence</artifactId>
 			<scope>system</scope>
 			<version>4.7.0.5</version>
-			<systemPath>${basedir}\src\lib\Residence4.7.0.5.jar</systemPath>
+			<systemPath>${basedir}/lib/Residence.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org</groupId>
 			<artifactId>kingdoms</artifactId>
 			<scope>system</scope>
 			<version>13.0.9</version>
-			<systemPath>${basedir}\src\lib\Kingdoms.jar</systemPath>
+			<systemPath>${basedir}/lib/Kingdoms.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>org</groupId>
 			<artifactId>generallib</artifactId>
 			<scope>system</scope>
 			<version>0.1.4</version>
-			<systemPath>${basedir}\src\lib\GLib.jar</systemPath>		
+			<systemPath>${basedir}/lib/GeneralLib.jar</systemPath>		
 		</dependency>
 		<dependency>
 		    <groupId>com.plotsquared</groupId>
