@@ -75,7 +75,6 @@ CircleRadiusDefault: false
 CircleRadiusWorlds:
   - example
 debug: false
-UpdateMessage: true
 OnJoinWorlds:
  - example
 Experimental: true

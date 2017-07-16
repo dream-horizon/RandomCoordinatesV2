@@ -57,6 +57,9 @@ public class HelpCommand implements CommandInterface {
                 if (sender.hasPermission("Random.Admin.Reload") || sender.hasPermission("Random.Admin.*") || sender.hasPermission("Random.*")) {
                     sender.sendMessage(prefix + good + "/RC Reload" + desc +  " Reloads the configuration files.");
                 }
+                if (sender.hasPermission("Random.Admin.Update") || sender.hasPermission("Random.Admin.*") || sender.hasPermission("Random.*")) {
+                    sender.sendMessage(prefix + good + "/RC Update" + desc +  " Checks for updates.");
+                }               
 
             } else if (args.length == 2 && args[1].equalsIgnoreCase("2")) {
                 sender.sendMessage(ChatColor.GOLD + "[RandomCoords] " + ChatColor.GREEN + "Help Page 2/3: Developed by Jolbol1/ImBaffled");

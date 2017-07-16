@@ -46,12 +46,17 @@ public class ConstructTabCompleter implements TabCompleter {
     public List<String> onTabComplete(final CommandSender commandSender, final Command command, final String s, final String[] args) {
         if (args.length == 1) {
             final List<String> list = new ArrayList<>();
-            list.add("set");
+            list.add("wand");
+            list.add("reload");
+            list.add("all");
+            list.add("help");
             list.add("player");
             list.add("portal");
-            list.add("all");
-            list.add("wand");
+            list.add("set");
+            list.add("region");
             list.add("warp");
+            list.add("chest");
+            list.add("update");
 
             final List<String> newList = new ArrayList<>();
 

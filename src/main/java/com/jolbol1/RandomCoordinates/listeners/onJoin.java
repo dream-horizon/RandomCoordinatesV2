@@ -47,13 +47,9 @@ public class onJoin implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent e) {
 
         //ONLY SEND UPDATE MESSAGE TO OP's
-        if(e.getPlayer().isOp()) {
-            if(RandomCoords.getPlugin().updateNeeded == true) {
-                e.getPlayer().setDisplayName(ChatColor.GOLD + "[RandomCoords]" + ChatColor.RED + " A new version is now available on Spigot. http://bit.ly/RandomTeleportSpigot");
-            }
+        if(e.getPlayer().isOp() || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.Notify") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.*") ||  RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.*")) {
+        	RandomCoords.getPlugin().updateManager.notifySender(e.getPlayer());
         }
-
-
 
         /**
          * If the onJoin config option is false, then dont run the code.
