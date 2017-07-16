@@ -499,14 +499,14 @@ public class MessageManager {
         sender.sendMessage(prefix() + messages);
     }
 
-    public void teleportedPlayer(final CommandSender sender, Player target) {
+    public void teleportedPlayer(final CommandSender sender, final Player target) {
         String message = RandomCoords.getPlugin().language.getString("TeleportedPlayer");
         String finalMessage = message.replaceAll("%player", target.getName());
         String messages = ChatColor.translateAlternateColorCodes('&', finalMessage);
         sender.sendMessage(prefix() + messages);
     }
 
-    public void regionNotExist(CommandSender sender, String region) {
+    public void regionNotExist(final CommandSender sender, final String region) {
         String message = RandomCoords.getPlugin().language.getString("RegionNotExist");
         String finalMess = message.replaceAll("%region", region);
         String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
@@ -514,8 +514,7 @@ public class MessageManager {
 
     }
 
-
-    public void teleportedWithinRegion(CommandSender sender, String region) {
+    public void teleportedWithinRegion(final CommandSender sender, final String region) {
         String message = RandomCoords.getPlugin().language.getString("TeleportedInRegion");
         String finalMess = message.replaceAll("%region", region);
         String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
@@ -523,8 +522,7 @@ public class MessageManager {
 
     }
 
-
-    public void inventoryContentsSaved(CommandSender sender, String fileName, boolean overwritten) {
+    public void inventoryContentsSaved(final CommandSender sender, final String fileName, final boolean overwritten) {
         if(!overwritten) {
             String message = RandomCoords.getPlugin().language.getString("InventorySaved");
             String finalMess = message.replaceAll("%file", fileName);
@@ -538,16 +536,37 @@ public class MessageManager {
         }
     }
 
-    public void itemSaved(CommandSender sender, String fileName) {
-
+    public void itemSaved(final CommandSender sender, final String fileName) {
             String message = RandomCoords.getPlugin().language.getString("ItemSaved");
             String finalMess = message.replaceAll("%file", fileName);
             String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
             sender.sendMessage(prefix() + messages);
-
-
     }
 
-    
+    public void notifyNewUpdate(final CommandSender sender, final String url, final String version) {
+    	String message = RandomCoords.getPlugin().language.getString("NotifyNewUpdate");
+    	String stageOne = message.replaceAll("%URL", url);
+    	String finalMess = stageOne.replaceAll("%version", version);
+    	String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
+    	sender.sendMessage(prefix() + messages);
+    }
 
+    public void notifyNewBuildsAhead(final CommandSender sender, final int buildsAhead) {
+    	String message = RandomCoords.getPlugin().language.getString("NotifyNewBuildsAhead");
+    	String finalMess = message.replaceAll("%builds", String.valueOf(buildsAhead));
+    	String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
+    	sender.sendMessage(prefix() + messages);
+    }
+    
+    public void notifyExperimentalVersion(final CommandSender sender) {
+    	String message = RandomCoords.getPlugin().language.getString("NotifyExperimentalVersion");
+    	String messages = ChatColor.translateAlternateColorCodes('&', message);
+    	sender.sendMessage(prefix() + messages);
+    }
+    
+    public void notifyUpdateLatestVersion(final CommandSender sender) {
+    	String message = RandomCoords.getPlugin().language.getString("NotifyUpdateLatestVersion");
+    	String messages = ChatColor.translateAlternateColorCodes('&', message);
+    	sender.sendMessage(prefix() + messages);
+    }
 }

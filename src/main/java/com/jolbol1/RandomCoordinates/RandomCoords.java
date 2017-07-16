@@ -23,6 +23,7 @@ import com.jolbol1.RandomCoordinates.commands.*;
 import com.jolbol1.RandomCoordinates.commands.handler.CommandHandler;
 import com.jolbol1.RandomCoordinates.listeners.*;
 import com.jolbol1.RandomCoordinates.managers.ConstructTabCompleter;
+import com.jolbol1.RandomCoordinates.managers.UpdateManager;
 //import com.jolbol1.RandomCoordinates.managers.Metrics;
 import com.jolbol1.RandomCoordinates.managers.Util.PortalLoaded;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -77,6 +78,8 @@ public class RandomCoords extends JavaPlugin {
     public FileConfiguration skyBlockSave;
     public FileConfiguration bonushChestExample;
     public FileConfiguration bonusChest;
+    public FileConfiguration update;
+    
     public HashMap<UUID, Location> skyBlock = new HashMap<>();
     public List<PortalLoaded> loadedPortalList;
 
@@ -90,6 +93,8 @@ public class RandomCoords extends JavaPlugin {
     public File warpFile;
     public File blackFile;
     public File skyBlockSaveFile;
+    public File updateFile;
+    
     final String ANSI_RESET = "\u001B[0m";
     final String ANSI_BOLD = "\u001B[1m";
     final String ANSI_BLUE = "\u001B[34m";
@@ -106,8 +111,8 @@ public class RandomCoords extends JavaPlugin {
     public int portalTeleport;
     public int warpTeleport;
 
-    public boolean updateNeeded = false;
-
+    public UpdateManager updateManager = new UpdateManager();
+    
     /**
      * Used to grab the plugin instance from this clas
      * @return The plugin instance
@@ -201,6 +206,10 @@ public class RandomCoords extends JavaPlugin {
         blacklist = setupFile(blackFile);
         if(blacklist.getStringList("Blacklisted") != null) { matchFile(blacklist, blackFile, "blacklist"); }
 
+        updateFile = new File(this.getDataFolder(), "update.yml");
+        update = setupFile(updateFile);
+        matchFile(update, updateFile, "update.yml");
+        
         pm.registerEvents(new Suffocation(), this);
         pm.registerEvents(new Invulnerable(), this);
         pm.registerEvents(new onJoin(), this);
@@ -225,6 +234,7 @@ public class RandomCoords extends JavaPlugin {
         handler.register("warp", new WarpsNew());
         handler.register("radius", new RadiusCommand());
         handler.register("chest", new BonusCommand());
+        handler.register("update", new UpdateCommand());
         getCommand("rc").setExecutor(handler);
         getCommand("rc").setTabCompleter(new ConstructTabCompleter());
         if (RandomCoords.getPlugin().config.getString("Metrics").equalsIgnoreCase("true")) {
@@ -232,14 +242,11 @@ public class RandomCoords extends JavaPlugin {
             setupCharts(metrics);
         }
 
-
         final PortalEnter pe = new PortalEnter();
         loadedPortalList = loadedPortals();
         pe.runTaskTimer(this, 0L, 20L);
 
-        if(config.getString("UpdateMessage").equalsIgnoreCase("true")) {
-            updateNeeded = updater();
-        }
+        updateManager.doUpdateCheck();
 
         for(String str: skyBlockSave.getKeys(true)) {
 
@@ -439,50 +446,6 @@ public class RandomCoords extends JavaPlugin {
         return YamlConfiguration.loadConfiguration(file);
 
     }
-
-    public boolean updater() {
-        if(!config.getString("UpdateMessage").equalsIgnoreCase("true")) {
-            return false;
-        }
-        //Gets the site URL we're reading from.
-        URL site;
-        //Sets the string as null, until its changed when we read.
-        String versionOnFile = null;
-
-        /**
-         * Trys to grab the coorinates from the Random.Org site.
-         * Catch if it cant, logs an error in the console.
-         */
-        try {
-            //Website URL.
-            final String web = "https://raw.githubusercontent.com/PHENOMICAL/RandomCoordinatesV2/master/src/main/resources/update.yml";
-            //Sets it as the site to be read from.
-            site = new URL(web);
-
-            /**
-             * Tries using buffered reader to read the line on the page.
-             */
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(site.openStream()))) {
-                //Set the line
-                String line;
-                /**
-                 * If the line is not null, set Random as the line number.
-                 */
-                while ((line = in.readLine()) != null) {
-                    //Set string random as line.
-                    versionOnFile = line;
-                }
-            }
-        } catch (IOException ignored) {
-            //Log if we couldnt read the line of the site.
-            RandomCoords.logger.severe("Couldnt grab the update.yml from the web.");
-        }
-        //Return the number as a string.
-        if(versionOnFile == null ) { return false; }
-        return !versionOnFile.equalsIgnoreCase(plugin.getDescription().getVersion());
-
-    }
-
 
     public List<PortalLoaded> loadedPortals() {
         if (RandomCoords.getPlugin().portals.get("Portal") == null) {

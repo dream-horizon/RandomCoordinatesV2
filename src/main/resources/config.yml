@@ -65,7 +65,6 @@ PortalCost: 0
 WarpCrossWorld: true
 
 #Limiter Settings
-UpdateAlert: true
 Limit: 0
 LimiterApplys:
  - Command
@@ -75,7 +74,6 @@ CircleRadiusDefault: false
 CircleRadiusWorlds:
   - example
 debug: false
-UpdateMessage: true
 OnJoinWorlds:
  - example
 Experimental: true

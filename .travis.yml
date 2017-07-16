@@ -1,9 +1,12 @@
 before_install:
-    - mkdir $TRAVIS_BUILD_DIR/lib
-    - curl -o $TRAVIS_BUILD_DIR/lib/GeneralLib.jar https://api.spiget.org/v2/resources/25348/download
-    - curl -o $TRAVIS_BUILD_DIR/lib/Kingdoms.jar https://api.spiget.org/v2/resources/6392/download
-    - curl -o $TRAVIS_BUILD_DIR/lib/Residence.jar http://ltcraft.lt/Residence/files/Residence4.7.0.5.jar
-    - curl -o $TRAVIS_BUILD_DIR/lib/RedProtect.jar https://api.spiget.org/v2/resources/15841/download
+    - export TARGET_VERSION="2.1.0-$TRAVIS_BRANCH"
+    - sudo find scripts/ -type d -exec chmod 777 {} +
+    - sudo find scripts/ -type f -exec chmod 777 {} +
+    - ./scripts/getDependencies.sh
+    - ./scripts/versioning.sh
+    - export VERSION_URL=$( cat versionurl)
+    - rm versionurl
+
 notifications:
   email: false
 language: java
@@ -11,14 +14,7 @@ jdk:
 - oraclejdk8
 
 before_deploy:
-    - echo -e "Starting to tag commit.\n"
-    - git config --global user.email "builds@travis-ci.org"
-    - git config --global user.name "Travis CI"
-    - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
-    - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-    - git push https://$GITPERM@github.com/$TRAVIS_REPO_SLUG $GIT_TAG
-    - git fetch origin
-    - echo -e "Finished with tagging.\n"
+    - ./scripts/tagReleases.sh
 
 deploy:
     provider: releases
@@ -29,11 +25,11 @@ deploy:
     draft: false
     api_key: $GITPERM
     file:
-        - "target/RandomCoordinates-2.1.0.jar"
+        - "target/RandomCoordinates-${TARGET_VERSION}.jar"
     on:
         tags: false
         all_branches: true
-        repo: PHENOMICAL/RandomCoordinatesV2
+        repo: $TRAVIS_REPO_SLUG
 
 branches:
     only:

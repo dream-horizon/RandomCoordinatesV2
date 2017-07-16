@@ -3,15 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jolbol1</groupId>
 	<artifactId>RandomCoordinates</artifactId>
-	<version>2.1.0</version>
+	<version>${env.TARGET_VERSION}</version>
 	<name>RandomCoordinates</name>
 	<description>An updated fork of RandomCoordinatesV2</description>
 	<packaging>jar</packaging>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+		<buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+		<maven.build.timestamp.format>dd.MM.YY-HH:mm</maven.build.timestamp.format>
+		<VERSION_URL>${env.VERSION_URL}</VERSION_URL>
+		<BRANCH>${env.TRAVIS_BRANCH}</BRANCH>
+		<BUILD_NUMBER>${env.TRAVIS_BUILD_NUMBER}</BUILD_NUMBER>
+		<RELEASE_URL>https://github.com/${env.TRAVIS_REPO_SLUG}/releases</RELEASE_URL>
 	</properties>
 
 	<repositories>
@@ -43,17 +48,17 @@
 			<id>bstats-repo</id>
 			<url>http://repo.bstats.org/content/repositories/releases/</url>
 		</repository>
-	    <repository>
-	    	<id>PlotSquared</id>
-	    	<url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
-	    </repository>		
+		<repository>
+			<id>PlotSquared</id>
+			<url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
-	    <pluginRepository>
-	        <id>apache.snapshots</id>
-	        <url>http://repository.apache.org/snapshots/</url>
-	    </pluginRepository>
+		<pluginRepository>
+			<id>apache.snapshots</id>
+			<url>http://repository.apache.org/snapshots/</url>
+		</pluginRepository>
 	</pluginRepositories>
 
 	<dependencies>
@@ -134,15 +139,21 @@
 			<artifactId>generallib</artifactId>
 			<scope>system</scope>
 			<version>0.1.4</version>
-			<systemPath>${basedir}/lib/GeneralLib.jar</systemPath>		
+			<systemPath>${basedir}/lib/GeneralLib.jar</systemPath>
 		</dependency>
 		<dependency>
-		    <groupId>com.plotsquared</groupId>
-		    <artifactId>plotsquared-api</artifactId>
-		    <version>latest</version>
+			<groupId>com.plotsquared</groupId>
+			<artifactId>plotsquared-api</artifactId>
+			<version>latest</version>
 		</dependency>
 	</dependencies>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -172,20 +183,10 @@
 				</executions>
 			</plugin>
 
-			<!-- 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.2</version>
-				<configuration>
-					<excludes>
-						<exclude>com/jolbol1/RandomCoordinates/checks/KingdomsClaim.java</exclude>
-						<exclude>com/jolbol1/RandomCoordinates/checks/RedProtect.java</exclude>
-						<exclude>com/jolbol1/RandomCoordinates/checks/ResidenceCheck.java</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			-->
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
+				<version>3.2</version> <configuration> <excludes> <exclude>com/jolbol1/RandomCoordinates/checks/KingdomsClaim.java</exclude> 
+				<exclude>com/jolbol1/RandomCoordinates/checks/RedProtect.java</exclude> <exclude>com/jolbol1/RandomCoordinates/checks/ResidenceCheck.java</exclude> 
+				</excludes> </configuration> </plugin> -->
 		</plugins>
 
 	</build>
