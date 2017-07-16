@@ -3,8 +3,8 @@ notifyUpdates: true
 notifyExperimental: true
 notifyBuildsAhead: true
 printToLog: true
-version: ${project.version}
-build: ${TRAVIS_BUILD_NUMBER}
+version: ${env.TARGET_VERSION}
+build: ${env.TRAVIS_BUILD_NUMBER}
 branch: ${env.TRAVIS_BRANCH}
-updateURL: https://raw.githubusercontent.com/${env.TRAVIS_REPO_SLUG}/${env.TRAVIS_BRANCH}/src/main/resources/update.yml
+updateURL: ${env.GIST_URL}
 releasePageURL: https://github.com/${env.TRAVIS_REPO_SLUG}/releases
