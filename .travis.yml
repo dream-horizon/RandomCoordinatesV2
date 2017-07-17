@@ -23,7 +23,7 @@ deploy:
     draft: false
     api_key: $GITPERM
     file:
-        - "target/RandomCoordinates-2.1.0.jar"
+        - "target/RandomCoordinates-${TARGET_VERSION}.jar"
     on:
         tags: false
         all_branches: true
