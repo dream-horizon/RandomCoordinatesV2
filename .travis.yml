@@ -1,18 +1,10 @@
 before_install:
     - export TARGET_VERSION="2.1.0-$TRAVIS_BRANCH"
-    - mkdir $TRAVIS_BUILD_DIR/lib
-    - curl -o $TRAVIS_BUILD_DIR/lib/GeneralLib.jar https://api.spiget.org/v2/resources/25348/download
-    - curl -o $TRAVIS_BUILD_DIR/lib/Kingdoms.jar https://api.spiget.org/v2/resources/6392/download
-    - curl -o $TRAVIS_BUILD_DIR/lib/Residence.jar http://ltcraft.lt/Residence/files/Residence4.7.0.5.jar
-    - curl -o $TRAVIS_BUILD_DIR/lib/RedProtect.jar https://api.spiget.org/v2/resources/15841/download
-    - echo -e "Deploying version info gist!\n"
-    - sudo apt-get -qq update
-    - sudo apt-get install -y jq
-    - curl -H "Authorization: token $GITPERM" https://api.github.com/users/PHENOMICAL -I
-    - export GIST_URL=$(curl --data '{"description":"Created through Travis-CI","public":"false","files":{"version.yml":{"content":"Branch':' $TRAVIS_BRANCH\nBuild':' $TRAVIS_BUILD_NUMBER\nVersion':' $TARGET_VERSION"}}}' https://api.github.com/gists | js  '.files."version.yml".raw_url')
-    - echo -e "Gist successfully deployed! URL: $GIST_URL\n"
-    - echo -e "Finished deploying version info!\n"
-    
+    - find /scripts/ -type d -exec chmod 755 {} +
+    - find /verzeichnis/ -type f -exec chmod 644 {} +
+    - ./scripts/getDependencies.sh
+    - ./scripts/versioning.sh
+
 notifications:
   email: false
 language: java
@@ -20,14 +12,7 @@ jdk:
 - oraclejdk8
 
 before_deploy:
-    - echo -e "Starting to tag commit.\n"
-    - git config --global user.email "builds@travis-ci.org"
-    - git config --global user.name "Travis CI"
-    - export GIT_TAG=build-$TRAVIS_BRANCH-$(date -u "+%Y-%m-%d-%H-%M-%S")-$TRAVIS_BUILD_NUMBER
-    - git tag $GIT_TAG -a -m "Generated tag from TravisCI build $TRAVIS_BUILD_NUMBER"
-    - git push https://$GITPERM@github.com/$TRAVIS_REPO_SLUG $GIT_TAG
-    - git fetch origin
-    - echo -e "Finished with tagging.\n"
+    - ./tagReleases.sh
 
 deploy:
     provider: releases
