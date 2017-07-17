@@ -4,6 +4,8 @@ before_install:
     - sudo find scripts/ -type f -exec chmod 777 {} +
     - ./scripts/getDependencies.sh
     - ./scripts/versioning.sh
+    - export VERSION_URL=$( cat versionurl)
+    - rm versionurl
 
 notifications:
   email: false
