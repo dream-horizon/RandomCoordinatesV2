@@ -1,7 +1,7 @@
 before_install:
     - export TARGET_VERSION="2.1.0-$TRAVIS_BRANCH"
-    - find scripts/ -type d -exec chmod 755 {} +
-    - find scripts/ -type f -exec chmod 644 {} +
+    - sudo find scripts/ -type d -exec chmod 777 {} +
+    - sudo find scripts/ -type f -exec chmod 777 {} +
     - ./scripts/getDependencies.sh
     - ./scripts/versioning.sh
 
