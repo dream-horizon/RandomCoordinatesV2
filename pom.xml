@@ -3,17 +3,20 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.jolbol1</groupId>
 	<artifactId>RandomCoordinates</artifactId>
-	<version>${TARGET_VERSION}</version>
+	<version>${env.TARGET_VERSION}</version>
 	<name>RandomCoordinates</name>
 	<description>An updated fork of RandomCoordinatesV2</description>
 	<packaging>jar</packaging>
-
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<buildTimestamp>${maven.build.timestamp}</buildTimestamp>
 		<maven.build.timestamp.format>dd.MM.YY-HH:mm</maven.build.timestamp.format>
+		<VERSION_URL>${env.VERSION_URL}</VERSION_URL>
+		<BRANCH>${env.TRAVIS_BRANCH}</BRANCH>
+		<BUILD_NUMBER>${env.TRAVIS_BUILD_NUMBER}</BUILD_NUMBER>
+		<RELEASE_URL>https://github.com/${env.TRAVIS_REPO_SLUG}/releases</RELEASE_URL>
 	</properties>
 
 	<repositories>

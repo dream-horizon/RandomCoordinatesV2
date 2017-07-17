@@ -3,8 +3,9 @@ notifyUpdates: true
 notifyExperimental: true
 notifyBuildsAhead: true
 printToLog: true
-version: ${env.TARGET_VERSION}
-build: ${env.TRAVIS_BUILD_NUMBER}
-branch: ${env.TRAVIS_BRANCH}
-updateURL: ${env.VERSION_URL}
-releasePageURL: https://github.com/${env.TRAVIS_REPO_SLUG}/releases
+version: ${project.version}
+build: ${BUILD_NUMBER}
+date: ${buildTimestamp}
+branch: ${BRANCH}
+updateURL: ${VERSION_URL}
+releasePageURL: ${RELEASE_URL}
