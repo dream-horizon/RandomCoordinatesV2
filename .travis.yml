@@ -12,7 +12,7 @@ jdk:
 - oraclejdk8
 
 before_deploy:
-    - ./tagReleases.sh
+    - ./scripts/tagReleases.sh
 
 deploy:
     provider: releases
