@@ -6,5 +6,5 @@ printToLog: true
 version: ${env.TARGET_VERSION}
 build: ${env.TRAVIS_BUILD_NUMBER}
 branch: ${env.TRAVIS_BRANCH}
-updateURL: ${env.GIST_URL}
+updateURL: ${env.VERSION_URL}
 releasePageURL: https://github.com/${env.TRAVIS_REPO_SLUG}/releases
