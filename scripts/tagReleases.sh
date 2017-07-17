@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ev
 echo -e "Starting to tag commit.\n"
 cd $TRAVIS_BUILD_DIR
 git config --global user.email "builds@travis-ci.org"

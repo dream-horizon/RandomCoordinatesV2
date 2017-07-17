@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ev
 echo -e "Starting downloading dependencies\n"
 cd $TRAVIS_BUILD_DIR
 mkdir lib
