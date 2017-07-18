@@ -24,7 +24,6 @@ import com.jolbol1.RandomCoordinates.RandomCoords;
 import com.jolbol1.RandomCoordinates.managers.CoordinatesManager;
 import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -48,7 +47,9 @@ public class onJoin implements Listener {
 
         //ONLY SEND UPDATE MESSAGE TO OP's
         if(e.getPlayer().isOp() || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.Notify") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.*") ||  RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.*")) {
-        	RandomCoords.getPlugin().updateManager.notifySender(e.getPlayer());
+        	if(RandomCoords.getPlugin().config.getBoolean("NotifyPlayerOnJoin")) {
+        		RandomCoords.getPlugin().updateManager.doUpdateCheck(e.getPlayer());
+        	}
         }
 
         /**

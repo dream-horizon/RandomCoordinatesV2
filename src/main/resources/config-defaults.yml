@@ -1,45 +1,28 @@
+#General Settings
+RandomOrg: false
+ChunkLoader: false
+Metrics: true
+debug: false
+Experimental: true
+BannedWorlds:
+ - world_the_end
+CircleRadiusDefault: false
+CircleRadiusWorlds:
+  - example
+
+#Update Settings
+UpdateCheckOnStartup: true
+NotifyPlayerOnJoin: true
+InformExperimental: true
+InformBuildsAhead: true
+ 
 #Teleport Settings
 MaxCoordinate: 5000
 MinCoordinate: 0
-CooldownTime: 5
-InvulTime: 10
-TimeBeforeTeleport: 5
-MaxAttempts: 20
-AttemptsPerTick: 1
-TicksBetweenAttempts: 3
-InformPlayerAfterAttempts: 50
-RandomOrg: false
 StopOnMove: true
 StopOnCombat: true
-ChunkLoader: false
 Sound: ENTITY_ENDERDRAGON_FLAP
 Effect: ENDER_SIGNAL
-BannedWorlds:
- - world_the_end
-
-#Safety Checks
-CheckingRadius: 100
-Factions: false
-GriefPrevention: false
-AvoidPlayers: false
-Towny: false
-WorldBorder: false
-WorldGuard: false
-RedProtect: false
-Kingdoms: false
-VanillaBorder: true
-SkyBlock: false
-Residence: false
-PlotSquared: false
-Regions:
- - example
-
-#On Join Features
-OnJoin: false
-OnJoinCommand: none
-BonusChest: false
-BonusChestItems:
- - WOOD_SWORD
 
 # Teleport Method, Can be random or warps
 Command: random
@@ -48,6 +31,53 @@ Others: random
 Portals: random
 Signs: random
 Join: random
+
+#Cooldown Settings
+CooldownTime: 5
+CooldownApplys:
+ - Command
+ - Warps
+ 
+InvulTime: 10
+
+#Wait before Teleport Settings
+TimeBeforeTeleport: 5
+TimeBeforeApplys:
+ - Command
+ - Warps
+ - Signs
+ 
+#Location finding Settings
+MaxAttempts: 20
+AttemptsPerTick: 1
+TicksBetweenAttempts: 3
+InformPlayerAfterAttempts: 50
+
+#Safety Checks
+CheckingRadius: 100
+Factions: false
+GriefPrevention: false
+AvoidPlayers: false
+Towny: false
+WorldBorder: false
+RedProtect: false
+Kingdoms: false
+VanillaBorder: true
+SkyBlock: false
+Residence: false
+PlotSquared: false
+WorldGuard: false
+Regions:
+ - example
+
+#On Join Features
+OnJoin: false
+OnJoinWorlds:
+ - example
+OnJoinCommand: none
+BonusChest: false
+BonusChestItems:
+ - WOOD_SWORD
 
 #Economy Settings
 CommandCost: 0
@@ -61,22 +91,3 @@ Limit: 0
 LimiterApplys:
  - Command
  - Warps
-
-TimeBeforeApplys:
- - Command
- - Warps
- - Signs
-
-CooldownApplys:
- - Command
- - Warps
-Metrics: true
-CircleRadiusDefault: false
-CircleRadiusWorlds:
-  - example
-debug: false
-OnJoinWorlds:
- - example
-Experimental: true
-
-

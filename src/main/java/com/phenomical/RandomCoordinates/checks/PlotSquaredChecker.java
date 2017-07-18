@@ -1,4 +1,4 @@
-package com.jolbol1.RandomCoordinates.checks;
+package com.phenomical.RandomCoordinates.checks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

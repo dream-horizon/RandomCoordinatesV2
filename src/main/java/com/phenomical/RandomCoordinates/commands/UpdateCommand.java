@@ -1,4 +1,4 @@
-package com.jolbol1.RandomCoordinates.commands;
+package com.phenomical.RandomCoordinates.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -13,9 +13,7 @@ public class UpdateCommand implements CommandInterface {
         if (args.length == 1) {
             if (RandomCoords.getPlugin().hasPermission(sender, "Random.Admin.Update") || RandomCoords.getPlugin().hasPermission(sender, "Random.Admin.*") || RandomCoords.getPlugin().hasPermission(sender, "Random.*"))
             	if (args[0].equalsIgnoreCase("update")) {
-            		if(RandomCoords.getPlugin().updateManager.doUpdateCheck()) {
-            			RandomCoords.getPlugin().updateManager.notifySender(sender);
-            		}
+            		RandomCoords.getPlugin().updateManager.doUpdateCheck(sender);
             	}
         }
 	}

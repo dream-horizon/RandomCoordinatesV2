@@ -546,7 +546,7 @@ public class MessageManager {
     public void notifyNewUpdate(final CommandSender sender, final String url, final String version) {
     	String message = RandomCoords.getPlugin().language.getString("NotifyNewUpdate");
     	String stageOne = message.replaceAll("%URL", url);
-    	String finalMess = stageOne.replaceAll("%version", version);
+    	String finalMess = stageOne.replaceAll("%newversion", version);
     	String messages = ChatColor.translateAlternateColorCodes('&', finalMess);
     	sender.sendMessage(prefix() + messages);
     }

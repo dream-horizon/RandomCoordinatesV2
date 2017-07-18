@@ -1,6 +1,6 @@
 name: RandomCoords
 main: com.jolbol1.RandomCoordinates.RandomCoords
-version: ${project.version}-${env.TRAVIS_REPO_SLUG}-${env.TRAVIS_BRANCH}-b${env.TRAVIS_BUILD_NUMBER}-${buildTimestamp}
+version: ${project.version}-${REPO}-${BRANCH}-b${BUILD_NUMBER}-${buildTimestamp}
 website: http://bukkit.org
 author: Jolbol1
 authors: [PHENOMICAL]

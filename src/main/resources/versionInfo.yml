@@ -1,0 +1,6 @@
+Version: ${project.version}
+Build: ${BUILD_NUMBER}
+Date: ${buildTimestamp}
+Branch: ${BRANCH}
+UpdateURL: ${VERSION_URL}
+ReleasePageURL: ${RELEASE_URL}

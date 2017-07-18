@@ -27,6 +27,8 @@ import com.jolbol1.RandomCoordinates.event.RandomTeleportEvent;
 import com.jolbol1.RandomCoordinates.managers.Util.Benchmark;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import com.jolbol1.RandomCoordinates.managers.Util.RandomWorld;
+import com.phenomical.RandomCoordinates.checks.PlotSquaredChecker;
+
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
 import org.bukkit.block.Biome;

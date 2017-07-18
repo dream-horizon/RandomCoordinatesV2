@@ -182,11 +182,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-compiler-plugin</artifactId> 
-				<version>3.2</version> <configuration> <excludes> <exclude>com/jolbol1/RandomCoordinates/checks/KingdomsClaim.java</exclude> 
-				<exclude>com/jolbol1/RandomCoordinates/checks/RedProtect.java</exclude> <exclude>com/jolbol1/RandomCoordinates/checks/ResidenceCheck.java</exclude> 
-				</excludes> </configuration> </plugin> -->
 		</plugins>
 
 	</build>
