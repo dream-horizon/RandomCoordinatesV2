@@ -91,7 +91,7 @@ public class Coordinates {
     //Load up RedProtect
     private final RedProtect redProtect = new RedProtect();
     //Load up KingdomsClaim
-    private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
+    //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
     //Grab an instance of the debug manager.
     private final DebugManager debugManager = new DebugManager();
 
@@ -151,7 +151,14 @@ public class Coordinates {
          * If the world is actual the nether, use the Nether class to find a Y coordinate thats safe.
          * This is to avoid .getHighestBlockAt returning the bedrock on top of the nether. (Will take longer to grab coordinate)
          */
-        if (world.getBiome(centerX, centerZ).equals(Biome.HELL)) {
+        Biome netherBiome;
+        if(RandomCoords.getServerVersion() >= 13){
+            netherBiome = Biome.valueOf("NETHER");
+        } else {
+            netherBiome = Biome.valueOf("HELL");
+        }
+
+        if (world.getBiome(centerX, centerZ).equals(netherBiome)) {
             highestPoint = nether.getSafeNetherY(preRandom);
 
         } else {
@@ -404,7 +411,14 @@ public class Coordinates {
         /**
          *This checks if the nether Y coord is left unchanged, thus bad Y coord. Seldom use.
          */
-        if (location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).equals(Biome.HELL)) {
+        Biome netherBione;
+        if(RandomCoords.getServerVersion() >= 13){
+            netherBione = Biome.valueOf("NETHER");
+        } else {
+            netherBione = Biome.valueOf("HELL");
+        }
+
+        if (location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()).equals(netherBione)) {
             if (location.getY() == 574272099) {
                 return false;
             }
@@ -438,7 +452,8 @@ public class Coordinates {
         if(RandomCoords.getPlugin().config.getString("debug").equalsIgnoreCase("true")) {
             debugManager.logToFile("Faction: " + String.valueOf(fc.FactionCheck(location)) + "\nGrief: " + String.valueOf(gpc.griefPrevent(location)) + "\nPlayer: " + String.valueOf(prc.isPlayerNear(location)) + "\nTowny: " + String.valueOf(tc.TownyCheck(location)) + "\nWorldBorder: " + String.valueOf(wbc.WorldBorderCheck(location)) + "\nWorldGuard: " + String.valueOf(worldGuardEnabled(location)) + "\nVanillaBorder" + String.valueOf(!isOutsideBorder(location)));
         }
-        return kingdomsClaim.KingdomsClaim(location) && redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
+        //return kingdomsClaim.KingdomsClaim(location) && redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
+        return redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
     }
 
 
@@ -1190,11 +1205,21 @@ public class Coordinates {
          * Else if the biome is the sky, Get the highest block for the end coord. (May seem odd to do this here, but why not)
          * Else add the default 2.5 amount.
          */
-        if (locationTP.getWorld().getBiome(locationTP.getBlockX(), locationTP.getBlockZ()).equals(Biome.HELL)) {
+        Biome netherBiome;
+        Biome endBiome;
+        if(RandomCoords.getServerVersion() >= 13){
+            netherBiome = Biome.valueOf("NETHER");
+            endBiome = Biome.valueOf("THE_END");
+        } else {
+            netherBiome = Biome.valueOf("HELL");
+            endBiome = Biome.valueOf("SKY");
+        }
+
+        if (locationTP.getWorld().getBiome(locationTP.getBlockX(), locationTP.getBlockZ()).equals(netherBiome)) {
             //Adds 1 to the Y value if the biome is hell.
             locationTP = locationTP.add(0, 1, 0);
 
-        } else if (locationTP.getWorld().getBiome(locationTP.getBlockX(), locationTP.getBlockZ()).equals(Biome.SKY) && !RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(locationTP.getWorld().getName())) {
+        } else if (locationTP.getWorld().getBiome(locationTP.getBlockX(), locationTP.getBlockZ()).equals(endBiome) && !RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(locationTP.getWorld().getName())) {
             //Gets the end coord from the end class.
             locationTP = end.endCoord(locationTP);
             //Gets the highest value at this point.

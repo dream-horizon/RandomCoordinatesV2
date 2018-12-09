@@ -77,7 +77,7 @@ public class CoordinatesManager {
     //Load up RedProtect
     private final RedProtect redProtect = new RedProtect();
     //Load up KingdomsClaim
-    private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
+    //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
     //Load up PlotSquaredChecker
     private final PlotSquaredChecker ps = new PlotSquaredChecker();
     
@@ -232,7 +232,8 @@ public class CoordinatesManager {
 
         }
         //If its not one of the blacklisted blocks, Continue and check for the regions.
-        return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
+        //return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
+        return !redProtect.redProtectClaimNearby(location) &&
                 !fc.factionLandNearby(location) && !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
                 !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location) &&
                 !residenceCheck.isChunkProtected(location) && !ps.PlotSquaredCheck(location);
@@ -335,7 +336,14 @@ public class CoordinatesManager {
 				            }
 				            
 				            //TODO: Is double implemented
-				            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == Biome.SKY ) {
+                            Biome endBiome;
+				            if(RandomCoords.getServerVersion() >= 13){
+				                endBiome = Biome.valueOf("THE_END");
+                            } else {
+				                endBiome = Biome.valueOf("SKY");
+                            }
+
+				            if(randomLocation.getWorld().getBiome(randomLocation.getBlockX(), randomLocation.getBlockZ()) == endBiome ) {
 				            	randomLocation = end.endCoord(randomLocation);
 				            }
 				            scheduleTeleport(player, randomLocation, coordType, timeBefore, cooldownTime, player.getLocation(), player.getHealth(), cost);
@@ -432,8 +440,15 @@ public class CoordinatesManager {
         Location safeLocation;
         if(shouldWarp(coordType)) {
             safeLocation = getRandomWarp(player, world, coordType);
-            
-            if(safeLocation.getWorld().getBiome(safeLocation.getBlockX(), safeLocation.getBlockZ()) == Biome.SKY ) {
+
+            Biome endBiome;
+            if(RandomCoords.getServerVersion() >= 13){
+                endBiome = Biome.valueOf("THE_END");
+            } else {
+                endBiome = Biome.valueOf("SKY");
+            }
+
+            if(safeLocation.getWorld().getBiome(safeLocation.getBlockX(), safeLocation.getBlockZ()) == endBiome ) {
                 safeLocation = end.endCoord(safeLocation);
             }
 
@@ -787,8 +802,13 @@ public class CoordinatesManager {
      * @return Safe y value, plus a buffer. (2.5 = max before fall damage)
      */
     private double getSafeY(Location location) {
-    	
-        if(location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()) == Biome.HELL) {
+        Biome netherBiome;
+    	if(RandomCoords.getServerVersion() >= 13){
+            netherBiome = Biome.valueOf("NETHER");
+        } else {
+            netherBiome = Biome.valueOf("HELL");
+        }
+        if(location.getWorld().getBiome(location.getBlockX(), location.getBlockZ()) == netherBiome) {
             return (nether.getSafeYNether(location));
         }
         if(RandomCoords.getPlugin().skyBlockSave.getStringList("SkyBlockWorlds").contains(location.getWorld().getName())) {

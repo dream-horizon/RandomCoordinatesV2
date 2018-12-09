@@ -120,6 +120,16 @@ public class RandomCoords extends JavaPlugin {
 	}
 
 	/**
+	 * Used to get the server version.
+	 *
+	 * Example: For 1.12.2 it will return 12.
+	 * @return The server version number.
+	 */
+	public static int getServerVersion(){
+		return Integer.parseInt(Bukkit.getBukkitVersion().split("\\.")[1]);
+	}
+
+	/**
 	 * What to do on start up.
 	 */
 	public void onEnable() {

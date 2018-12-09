@@ -65,7 +65,14 @@ public class WandGive implements CommandInterface {
      * @return the Wand ItemStack
      */
     public ItemStack wand() {
-        final ItemStack wand = new ItemStack(Material.GOLD_AXE);
+        Material wandMaterial;
+        if(RandomCoords.getServerVersion() >= 13) {
+            wandMaterial = Material.valueOf("GOLDEN_AXE");
+        } else {
+            wandMaterial = Material.valueOf("GOLD_AXE");
+        }
+
+        final ItemStack wand = new ItemStack(wandMaterial);
         final ItemMeta itemMeta = wand.getItemMeta();
         itemMeta.setDisplayName(ChatColor.GOLD + "Random Wand");
         final List<String> lore = new ArrayList<>();

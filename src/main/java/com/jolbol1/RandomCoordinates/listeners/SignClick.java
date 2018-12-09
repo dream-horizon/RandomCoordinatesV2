@@ -35,7 +35,7 @@ public class SignClick implements Listener {
         double cost = 0;
         String line1 = null;
         if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (e.getClickedBlock().getType() == Material.WALL_SIGN || e.getClickedBlock().getType() == Material.SIGN || e.getClickedBlock().getType() == Material.SIGN_POST) {
+            if(isSign(e.getClickedBlock().getType())){
                 final Sign sign = (Sign) e.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[RandomCoords]")) {
                     if ((RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.*") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.Sign") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.*")) && e.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -81,6 +81,21 @@ public class SignClick implements Listener {
                 }
             }
         }
+    }
+
+    /**
+     * Checks if the given material is a sign.
+     *
+     * @return True if the given material is a sign.
+     */
+    private boolean isSign(Material mat){
+        if(mat == Material.WALL_SIGN || mat == Material.SIGN){
+            return true;
+        }
+        if(RandomCoords.getServerVersion() < 13){
+            return mat.toString().equals("SIGN_POST");
+        }
+        return false;
     }
 
 }

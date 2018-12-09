@@ -21,7 +21,7 @@ MaxCoordinate: 5000
 MinCoordinate: 0
 StopOnMove: true
 StopOnCombat: true
-Sound: ENTITY_ENDERDRAGON_FLAP
+Sound: ENTITY_ENDER_DRAGON_FLAP
 Effect: ENDER_SIGNAL
 
 # Teleport Method, Can be random or warps

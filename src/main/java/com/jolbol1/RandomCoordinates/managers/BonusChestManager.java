@@ -167,7 +167,14 @@ public class BonusChestManager {
                 }
 
                 if (itemData.containsKey("FireworkEffect")) {
-                    if (itemStack.getType().equals(Material.FIREWORK)) {
+                    Material firework;
+                    if(RandomCoords.getServerVersion() >= 13){
+                        firework = Material.valueOf("FIREWORK_ROCKET");
+                    } else {
+                        firework = Material.valueOf("FIREWORK");
+                    }
+
+                    if (itemStack.getType().equals(firework)) {
                         FireworkMeta fireworkMeta = (FireworkMeta) itemMeta;
                         fireworkMeta.addEffects((Iterable<FireworkEffect>) itemData.get("FireworkEffect"));
                         itemStack.setItemMeta(fireworkMeta);
@@ -176,7 +183,14 @@ public class BonusChestManager {
                 }
 
                 if (itemData.containsKey("SkullOwner")) {
-                    if (itemStack.getType().equals(Material.SKULL_ITEM)) {
+                    Material skull;
+                    if(RandomCoords.getServerVersion() >= 13){
+                        skull = Material.valueOf("PLAYER_HEAD");
+                    } else {
+                        skull = Material.valueOf("SKULL_ITEM");
+                    }
+
+                    if (itemStack.getType().equals(skull)) {
                         SkullMeta skullMeta = (SkullMeta) itemMeta;
                         skullMeta.setOwner(String.valueOf(itemData.get("SkullOwner")));
                         itemStack.setItemMeta(skullMeta);
@@ -394,13 +408,23 @@ public class BonusChestManager {
             yamlFile.set(itemName + ".Colour", leatherArmorMeta.getColor());
         }
 
-        if(item.getType().equals(Material.FIREWORK)) {
+        Material firework;
+        Material skull;
+        if(RandomCoords.getServerVersion() >= 13){
+            firework = Material.valueOf("FIREWORK_ROCKET");
+            skull = Material.valueOf("PLAYER_HEAD");
+        } else {
+            firework = Material.valueOf("FIREWORK");
+            skull = Material.valueOf("SKULL_ITEM");
+        }
+
+        if(item.getType().equals(firework)) {
             FireworkMeta fireworkMeta = (FireworkMeta) itemMeta;
             yamlFile.set(itemName + ".FireworkEffect", fireworkMeta.getEffects());
 
         }
 
-        if(item.getType().equals(Material.SKULL_ITEM) ) {
+        if(item.getType().equals(skull) ) {
             SkullMeta skullMeta = (SkullMeta) itemMeta;
             yamlFile.set(itemName + ".SkullOwner", skullMeta.getOwner());
         }

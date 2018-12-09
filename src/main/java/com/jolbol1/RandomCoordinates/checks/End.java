@@ -19,6 +19,7 @@
 
 package com.jolbol1.RandomCoordinates.checks;
 
+import com.jolbol1.RandomCoordinates.RandomCoords;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -47,13 +48,23 @@ public class End {
         final int bx = x;
         final int bz = z;
 
+        Material endStone;
+        Material endBricks;
+
+        if(RandomCoords.getServerVersion() >= 13) {
+            endStone = Material.valueOf("END_STONE");
+            endBricks = Material.valueOf("END_STONE_BRICKS");
+        } else {
+            endStone = Material.valueOf("ENDER_STONE");
+            endBricks = Material.valueOf("END_BRICKS");
+        }
 
         for (int i = 0; i < r * 2 + 1; i++) {
             for (int j = 0; j < r * 2 + 1; j++) {
                 for (int k = 0; k < r * 2 + 1; k++) {
 
                     final Block b = l.getWorld().getBlockAt(x, y, z);
-                    if (b.getType() == Material.ENDER_STONE || b.getType() == Material.END_BRICKS) {
+                    if (b.getType() == endStone || b.getType() == endBricks) {
                         return b.getLocation().add(0, 2.5, 0);
                     }
 
@@ -68,6 +79,4 @@ public class End {
         }
         return null;
     }
-
-
 }

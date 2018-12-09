@@ -49,7 +49,7 @@ public class BlockPortal implements Listener {
         /**
          * If the material thats causing the physics event is one of these, Execute the next code, Else allow physics normally.
          */
-        if(mat == Material.WATER || mat == Material.STATIONARY_WATER || mat == Material.LAVA || mat == Material.STATIONARY_LAVA || mat == Material.PORTAL || mat == Material.ENDER_PORTAL) {
+        if(checkMaterial(mat)) {
 
             /**
              * If There are not any portals, Allow natural physics.
@@ -123,9 +123,31 @@ public class BlockPortal implements Listener {
         }
     }
 
-
-
-
+    /**
+     * Checks if the material that's causing the physics event is a liquid or a portal.
+     */
+    private boolean checkMaterial(Material mat){
+        if(RandomCoords.getServerVersion() >= 13){
+            switch (mat.toString()){
+                case "WATER":
+                case "LAVA":
+                case "NETHER_PORTAL":
+                case "END_PORTAL":
+                    return true;
+            }
+        } else {
+            switch (mat.toString()){
+                case "WATER":
+                case "STATIONARY_WATER":
+                case "LAVA":
+                case "STATIONARY_LAVA":
+                case "PORTAL":
+                case "ENDER_PORTAL":
+                    return true;
+            }
+        }
+        return false;
+    }
 }
 
 
