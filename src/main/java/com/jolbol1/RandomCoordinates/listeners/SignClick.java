@@ -7,8 +7,8 @@ import com.jolbol1.RandomCoordinates.managers.MessageManager;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,7 +35,7 @@ public class SignClick implements Listener {
         double cost = 0;
         String line1 = null;
         if (e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if(isSign(e.getClickedBlock().getType())){
+            if(isSign(e.getClickedBlock())){
                 final Sign sign = (Sign) e.getClickedBlock().getState();
                 if (sign.getLine(0).equalsIgnoreCase(ChatColor.GREEN + "[RandomCoords]")) {
                     if ((RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.*") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.Sign") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.*")) && e.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -84,16 +84,16 @@ public class SignClick implements Listener {
     }
 
     /**
-     * Checks if the given material is a sign.
+     * Checks if the given block is a sign.
      *
-     * @return True if the given material is a sign.
+     * @return True if the given block is a sign.
      */
-    private boolean isSign(Material mat){
-        if(mat == Material.WALL_SIGN || mat == Material.SIGN){
+    private boolean isSign(Block block){
+        if(block.getState() instanceof Sign){
             return true;
         }
         if(RandomCoords.getServerVersion() < 13){
-            return mat.toString().equals("SIGN_POST");
+            return block.getType().toString().equals("SIGN_POST");
         }
         return false;
     }

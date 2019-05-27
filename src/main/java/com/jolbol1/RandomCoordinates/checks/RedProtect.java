@@ -19,8 +19,8 @@
 
 package com.jolbol1.RandomCoordinates.checks;
 
-import br.net.fabiozumbi12.RedProtect.API.RedProtectAPI;
-import br.net.fabiozumbi12.RedProtect.Region;
+import br.net.fabiozumbi12.RedProtect.Bukkit.API.RedProtectAPI;
+import br.net.fabiozumbi12.RedProtect.Bukkit.Region;
 import com.jolbol1.RandomCoordinates.RandomCoords;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -54,7 +54,7 @@ public class RedProtect {
               //  for (int i = 0; i < r * 2 + 1; i++) {
                     for (int j = 0; j < r * 2 + 1; j++) {
                         for (int k = 0; k < r * 2 + 1; k++) {
-                            Region reg = RedProtectAPI.getRegion(l);
+                            Region reg = new RedProtectAPI().getRegion(l);
                             if (reg != null) {
                                 return false;
                             }
@@ -108,7 +108,7 @@ public class RedProtect {
                 x = l.getBlockX();
                 y = l.getBlockY();
                 z = l.getBlockZ();
-                Region reg = RedProtectAPI.getRegion(l.getWorld().getBlockAt(x + (chX * 16), y, z + (chZ * 16)).getLocation());
+                Region reg = new RedProtectAPI().getRegion(l.getWorld().getBlockAt(x + (chX * 16), y, z + (chZ * 16)).getLocation());
                 if (reg != null) {
                     return true;
                 }
