@@ -68,27 +68,13 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.14.1-R0.1-SNAPSHOT</version>
+			<version>1.14.4-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>net.milkbowl.vault</groupId>
 			<artifactId>VaultAPI</artifactId>
 			<version>1.7</version>
-		</dependency>
-		<dependency>
-			<groupId>com.massivecraft.massivecore</groupId>
-			<artifactId>MassiveCore</artifactId>
-			<version>2.14.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/MassiveCore.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>com.massivecraft.factions</groupId>
-			<artifactId>Factions</artifactId>
-			<version>2.14.0</version>
-			<scope>system</scope>
-			<systemPath>${basedir}/lib/Factions.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.sk89q</groupId>
@@ -131,18 +117,6 @@
 			<artifactId>RedProtect-Spigot-1.13</artifactId>
 			<version>7.6.0</version>
 			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.bekvon.bukkit</groupId>
-			<artifactId>residence</artifactId>
-			<scope>system</scope>
-			<version>4.8.6.3</version>
-			<systemPath>${basedir}/lib/Residence.jar</systemPath>
-		</dependency>
-		<dependency>
-			<groupId>com.plotsquared</groupId>
-			<artifactId>plotsquared-api</artifactId>
-			<version>latest</version>
 		</dependency>
 	</dependencies>
 	<build>

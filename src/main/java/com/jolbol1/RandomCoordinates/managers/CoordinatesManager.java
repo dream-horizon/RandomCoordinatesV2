@@ -27,7 +27,6 @@ import com.jolbol1.RandomCoordinates.event.RandomTeleportEvent;
 import com.jolbol1.RandomCoordinates.managers.Util.Benchmark;
 import com.jolbol1.RandomCoordinates.managers.Util.CoordType;
 import com.jolbol1.RandomCoordinates.managers.Util.RandomWorld;
-import com.phenomical.RandomCoordinates.checks.PlotSquaredChecker;
 
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.*;
@@ -56,8 +55,6 @@ public class CoordinatesManager {
     private final ThreadLocalRandom random = ThreadLocalRandom.current();
     //Creates an instance of the message manager class.
     private final MessageManager messages = new MessageManager();
-    // Creates an instance of the Faction Checker class.
-    private final FactionChecker fc = new FactionChecker();
     //Creates an instance of the Grief Prevention class
     private final GriefPreventionCheck gpc = new GriefPreventionCheck();
     //Creates an instance of the Grief Prevention class.
@@ -76,17 +73,11 @@ public class CoordinatesManager {
     //private final int maxAttempts = RandomCoords.getPlugin().config.getInt("MaxAttempts");
     //Load up RedProtect
     private final RedProtect redProtect = new RedProtect();
-    //Load up KingdomsClaim
-    //private final KingdomsClaim kingdomsClaim = new KingdomsClaim();
-    //Load up PlotSquaredChecker
-    private final PlotSquaredChecker ps = new PlotSquaredChecker();
     
     //Grab an instance of the debug manager.
     private final DebugManager debugManager = new DebugManager();
 
     private final BonusChestManager bonusChestManager = new BonusChestManager();
-    //Load up ResidenceCheck
-    private final ResidenceCheck residenceCheck = new ResidenceCheck();
 
     public int key = 574272099;
 
@@ -234,9 +225,8 @@ public class CoordinatesManager {
         //If its not one of the blacklisted blocks, Continue and check for the regions.
         //return !kingdomsClaim.kingdomClaimNearby(location) && !redProtect.redProtectClaimNearby(location) &&
         return !redProtect.redProtectClaimNearby(location) &&
-                !fc.factionLandNearby(location) && !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
-                !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location) &&
-                !residenceCheck.isChunkProtected(location) && !ps.PlotSquaredCheck(location);
+                !tc.townyClaimNearby(location) && !prc.areThereNearbyPlayers(location) &&
+                !gpc.griefPrevNearby(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
     }
 
 

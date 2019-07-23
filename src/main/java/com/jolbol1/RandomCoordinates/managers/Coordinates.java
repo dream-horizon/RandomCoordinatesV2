@@ -59,8 +59,6 @@ public class Coordinates {
     private final SecureRandom random = new SecureRandom();
     //Creates an instance of the message manager class.
     private final MessageManager messages = new MessageManager();
-    // Creates an instance of the Faction Checker class.
-    private final FactionChecker fc = new FactionChecker();
     //Creates an instance of the Grief Prevention class
     private final GriefPreventionCheck gpc = new GriefPreventionCheck();
     //Creates an instance of the Grief Prevention class.
@@ -450,10 +448,10 @@ public class Coordinates {
          * Otherwise, If the block is safe, Is it in any of the regions?
          */
         if(RandomCoords.getPlugin().config.getString("debug").equalsIgnoreCase("true")) {
-            debugManager.logToFile("Faction: " + String.valueOf(fc.FactionCheck(location)) + "\nGrief: " + String.valueOf(gpc.griefPrevent(location)) + "\nPlayer: " + String.valueOf(prc.isPlayerNear(location)) + "\nTowny: " + String.valueOf(tc.TownyCheck(location)) + "\nWorldBorder: " + String.valueOf(wbc.WorldBorderCheck(location)) + "\nWorldGuard: " + String.valueOf(worldGuardEnabled(location)) + "\nVanillaBorder" + String.valueOf(!isOutsideBorder(location)));
+            debugManager.logToFile("\nGrief: " + String.valueOf(gpc.griefPrevent(location)) + "\nPlayer: " + String.valueOf(prc.isPlayerNear(location)) + "\nTowny: " + String.valueOf(tc.TownyCheck(location)) + "\nWorldBorder: " + String.valueOf(wbc.WorldBorderCheck(location)) + "\nWorldGuard: " + String.valueOf(worldGuardEnabled(location)) + "\nVanillaBorder" + String.valueOf(!isOutsideBorder(location)));
         }
         //return kingdomsClaim.KingdomsClaim(location) && redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
-        return redProtect.RedProtect(location) && fc.FactionCheck(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
+        return redProtect.RedProtect(location) && gpc.griefPrevent(location) && prc.isPlayerNear(location) && tc.TownyCheck(location) && wbc.WorldBorderCheck(location) && worldGuardEnabled(location) && !isOutsideBorder(location);
     }
 
 

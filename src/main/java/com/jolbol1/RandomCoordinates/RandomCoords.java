@@ -24,8 +24,6 @@ import com.jolbol1.RandomCoordinates.commands.handler.CommandHandler;
 import com.jolbol1.RandomCoordinates.listeners.*;
 import com.jolbol1.RandomCoordinates.managers.ConstructTabCompleter;
 import com.jolbol1.RandomCoordinates.managers.Util.PortalLoaded;
-import com.phenomical.RandomCoordinates.commands.UpdateCommand;
-import com.phenomical.RandomCoordinates.managers.UpdateManager;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import net.milkbowl.vault.economy.Economy;
 
@@ -107,8 +105,6 @@ public class RandomCoords extends JavaPlugin {
 	public int allTeleport;
 	public int portalTeleport;
 	public int warpTeleport;
-
-	public UpdateManager updateManager = new UpdateManager();
 
 	/**
 	 * Used to grab the plugin instance from this clas
@@ -210,10 +206,6 @@ public class RandomCoords extends JavaPlugin {
 		
 		versionInfo = YamlConfiguration.loadConfiguration(new InputStreamReader(this.getResource("versionInfo.yml")));
 		
-		if(config.getBoolean("UpdateCheckOnStartup")) {
-			updateManager.doUpdateCheck(getServer().getConsoleSender());
-		}
-		
 		pm.registerEvents(new Suffocation(), this);
 		pm.registerEvents(new Invulnerable(), this);
 		pm.registerEvents(new onJoin(), this);
@@ -239,7 +231,6 @@ public class RandomCoords extends JavaPlugin {
 		handler.register("warp", new WarpsNew());
 		handler.register("radius", new RadiusCommand());
 		handler.register("chest", new BonusCommand());
-		handler.register("update", new UpdateCommand());
 
 		getCommand("rc").setExecutor(handler);
 		getCommand("rc").setTabCompleter(new ConstructTabCompleter());

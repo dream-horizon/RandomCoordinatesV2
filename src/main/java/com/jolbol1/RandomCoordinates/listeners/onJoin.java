@@ -45,13 +45,6 @@ public class onJoin implements Listener {
     @EventHandler
     public void onPlayerJoin(final PlayerJoinEvent e) {
 
-        //ONLY SEND UPDATE MESSAGE TO OP's
-        if(e.getPlayer().isOp() || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.Notify") || RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.Admin.*") ||  RandomCoords.getPlugin().hasPermission(e.getPlayer(), "Random.*")) {
-        	if(RandomCoords.getPlugin().config.getBoolean("NotifyPlayerOnJoin")) {
-        		RandomCoords.getPlugin().updateManager.doUpdateCheck(e.getPlayer());
-        	}
-        }
-
         /**
          * If the onJoin config option is false, then dont run the code.
          */
